@@ -1,0 +1,5 @@
+# Config
+# Allows you to use currency as payment for skills
+# Available options: Vault, false
+# Default = false
+use_currency: false
