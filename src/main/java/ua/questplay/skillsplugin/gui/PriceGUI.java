@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ClassGUI implements InventoryHolder {
+public class PriceGUI implements InventoryHolder {
     private final Inventory inventory;
-    private final String title;
+    private final Component title;
 
-    public ClassGUI(String title, int size) {
+    public PriceGUI(Component title, int size) {
         this.title = title;
         this.inventory = Bukkit.createInventory(this, size, title);
     }
@@ -35,6 +35,21 @@ public class ClassGUI implements InventoryHolder {
         inventory.setItem(slot, item);
     }
 
+    public void addItemCount(int slot, Material material, Component displayname, List<Component> lore, int count) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.displayName(displayname);
+
+        if (lore != null && !lore.isEmpty()) {
+            meta.lore(lore);
+        }
+
+        item.setAmount(count);
+        item.setItemMeta(meta);
+        inventory.setItem(slot, item);
+    }
+
 
     public void open(@NotNull Player player) {
         player.openInventory(inventory);
@@ -42,10 +57,6 @@ public class ClassGUI implements InventoryHolder {
 
     @Override
     public @NotNull Inventory getInventory() {
-        return inventory;
-    }
-
-    public String getTitle() {
-        return title;
+        return null;
     }
 }

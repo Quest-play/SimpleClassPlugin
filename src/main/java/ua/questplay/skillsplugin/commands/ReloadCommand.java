@@ -19,17 +19,17 @@ public class ReloadCommand implements CommandExecutor {
         switch (args[0]) {
             case "config" -> {
                 plugin.reloadPluginConfig();
-                sender.sendMessage(plugin.getMessageFromKey("config.reload"));
+                sender.sendMessage(plugin.formattedFromKey("config.reload"));
             }
             case "messages" -> {
                 plugin.reloadMessages();
-                sender.sendMessage(plugin.getMessageFromKey("config.messages"));
+                sender.sendMessage(plugin.formattedFromKey("config.messages"));
             }
             case "all" -> {
                 plugin.reloadPluginConfig();
-                sender.sendMessage(plugin.getMessageFromKey("config.reload"));
+                sender.sendMessage(plugin.formattedFromKey("config.reload"));
                 plugin.reloadMessages();
-                sender.sendMessage(plugin.getMessageFromKey("config.messages"));
+                sender.sendMessage(plugin.formattedFromKey("config.messages"));
             }
             default -> {
                 sender.sendMessage("");

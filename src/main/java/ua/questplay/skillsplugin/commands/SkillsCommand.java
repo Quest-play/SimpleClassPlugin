@@ -7,18 +7,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import ua.questplay.skillsplugin.SkillData;
+import ua.questplay.skillsplugin.skills.SkillData;
 import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.SkillsGUI;
+import ua.questplay.skillsplugin.skills.SkillType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SkillsCommand implements CommandExecutor {
     private final SkillsPlugin plugin;
+    private final String skillTag = null;
 
     public SkillsCommand(SkillsPlugin plugin) {
         this.plugin = plugin;
@@ -26,223 +26,72 @@ public class SkillsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getMessageFromKey("restrict.onlyplayer"));
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
             return true;
         }
-        Player player = (Player) sender;
-        SkillsGUI skillsGUI = new SkillsGUI(MiniMessage.miniMessage().deserialize(""),54);
+        SkillsGUI skillsGUI = new SkillsGUI(plugin.formattedFromKey("skills_gui.title"),54);
 
         Component frameName = Component.text("");
-        List<Component> framLore = Arrays.asList(Component.text(""));
+        List<Component> frameLore = List.of(Component.text(""));
 
         for (int i = 0; i < 9; i++) {
-            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, framLore);
+            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore);
         }
 
         for (int i = 45; i < 54; i++) {
-            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, framLore);
+            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore);
         }
 
-        List<SkillData> skills = getSkillsForPlayer(player);
-        int[] skillSlots = {9, 10, 11, 12, 13};
-        for (int i = 0; i < Math.min(skills.size(), skillSlots.length); i++) {
-            if (plugin.getDbManager().hasSkill(player.getUniqueId(), "skill_thief_speed")) {
-                skillsGUI.addItem(i, skills.getFirst().getIcon(), skills.getFirst().getName(), skills.getFirst().getDescription());
-            } else {
-                skillsGUI.addItem(i, skills.getFirst().getIcon(), skills.getFirst().getName(), skills.getFirst().getDescription());
-            }
+        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_killer")) {
+            SkillData killerSpeed = plugin.getSkillManager().getSkill(SkillType.KILLER_SPEED);
+            SkillData killerMurder =  plugin.getSkillManager().getSkill(SkillType.KILLER_MURDER);
+            SkillData killerHaste = plugin.getSkillManager().getSkill(SkillType.KILLER_HASTE);
+            SkillData killerVampirism = plugin.getSkillManager().getSkill(SkillType.KILLER_VAMPIRISM);
+            SkillData killerRecovery = plugin.getSkillManager().getSkill(SkillType.KILLER_RECOVERY);
+
+
+            skillsGUI.addItem(9, killerSpeed.getIcon(), killerSpeed.getName(), killerSpeed.getDescription());
+            skillsGUI.addItem(10, killerMurder.getIcon(), killerMurder.getName(), killerMurder.getDescription());
+            skillsGUI.addItem(11, killerHaste.getIcon(), killerHaste.getName(), killerHaste.getDescription());
+            skillsGUI.addItem(12, killerVampirism.getIcon(), killerVampirism.getName(), killerVampirism.getDescription());
+            skillsGUI.addItem(13, killerRecovery.getIcon(), killerRecovery.getName(), killerRecovery.getDescription());
         }
+        //-------------------------------------------------------------------------------------------------------------
+        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_merchant")) {
+            SkillData merchant_luck = plugin.getSkillManager().getSkill(SkillType.MERCHANT_LUCK);
+            SkillData merchant_exp =  plugin.getSkillManager().getSkill(SkillType.MERCHANT_EXP);
+            SkillData merchant_run = plugin.getSkillManager().getSkill(SkillType.MERCHANT_RUN);
+            SkillData merchant_hero = plugin.getSkillManager().getSkill(SkillType.MERCHANT_HERO);
+            SkillData merchant_blessing = plugin.getSkillManager().getSkill(SkillType.MERCHANT_BLESSING);
+
+
+            skillsGUI.addItem(9, merchant_luck.getIcon(), merchant_luck.getName(), merchant_luck.getDescription());
+            skillsGUI.addItem(10, merchant_exp.getIcon(), merchant_exp.getName(), merchant_exp.getDescription());
+            skillsGUI.addItem(11, merchant_run.getIcon(), merchant_run.getName(), merchant_run.getDescription());
+            skillsGUI.addItem(12, merchant_hero.getIcon(), merchant_hero.getName(), merchant_hero.getDescription());
+            skillsGUI.addItem(13, merchant_blessing.getIcon(), merchant_blessing.getName(), merchant_blessing.getDescription());
+        }
+        //--------------------------------------------------------------------------------------------------------------
+        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
+            SkillData thief_speed = plugin.getSkillManager().getSkill(SkillType.THIEF_SPEED);
+            SkillData thief_haste =  plugin.getSkillManager().getSkill(SkillType.THIEF_HASTE);
+            SkillData thief_exp = plugin.getSkillManager().getSkill(SkillType.THIEF_EXP);
+            SkillData thief_caution = plugin.getSkillManager().getSkill(SkillType.THIEF_CAUTION);
+            SkillData thief_specialization = plugin.getSkillManager().getSkill(SkillType.THIEF_SPECIALIZATION);
+
+
+            skillsGUI.addItem(9, thief_speed.getIcon(), thief_speed.getName(), thief_speed.getDescription());
+            skillsGUI.addItem(10, thief_haste.getIcon(), thief_haste.getName(), thief_haste.getDescription());
+            skillsGUI.addItem(11, thief_exp.getIcon(), thief_exp.getName(), thief_exp.getDescription());
+            skillsGUI.addItem(12, thief_caution.getIcon(), thief_caution.getName(), thief_caution.getDescription());
+            skillsGUI.addItem(13, thief_specialization.getIcon(), thief_specialization.getName(), thief_specialization.getDescription());
+        }
+
 
         skillsGUI.open(player);
 
         return true;
     }
 
-    public List<SkillData> getSkillsForPlayer(Player player) {
-        List<SkillData> skills = new ArrayList<>();
-
-        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.speed")),
-                    Material.FEATHER,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.speed_desc"))),
-                    "skill_thief_speed",
-                    Arrays.asList(
-                            new ItemStack(Material.SUGAR, 64), // 3 зелья скорости I
-                            new ItemStack(Material.GOLD_INGOT, 16)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.haste")),
-                    Material.GOLDEN_SWORD,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.haste_desc"))),
-                    "skill_thief_haste",
-                    Arrays.asList(
-                            new ItemStack(Material.SUGAR, 96),
-                            new ItemStack(Material.BLAZE_POWDER, 32),
-                            new ItemStack(Material.GOLDEN_APPLE, 1)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.stole_exp")),
-                    Material.EXPERIENCE_BOTTLE,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.stole_exp_desc"))),
-                    "skill_thief_stole_exp",
-                    Arrays.asList(
-                            new ItemStack(Material.EXPERIENCE_BOTTLE, 64),
-                            new ItemStack(Material.EMERALD, 12),
-                            new ItemStack(Material.DIAMOND, 2),
-                            new ItemStack(Material.COPPER_INGOT, 64)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.caution")),
-                    Material.LEATHER_BOOTS,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.caution_desc"))),
-                    "skill_thief_caution",
-                    Arrays.asList(
-                            new ItemStack(Material.ANCIENT_DEBRIS, 3),
-                            new ItemStack(Material.GOLDEN_APPLE, 10)
-                    )
-
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.specialization")),
-                    Material.WOODEN_SWORD,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.thief.specialization_desc"))),
-                    "skill_thief_specialization",
-                    Arrays.asList(
-                            new ItemStack(Material.SUGAR, 256),
-                            new ItemStack(Material.BLAZE_POWDER, 128),
-                            new ItemStack(Material.NETHERITE_INGOT, 3),
-                            new ItemStack(Material.GOLDEN_APPLE, 4)
-                    )
-            ));
-        }
-
-        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_assassin")) {
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.speed")),
-                    Material.BLAZE_POWDER,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.speed_desc"))),
-                    "skill_assassin_speed",
-                    Arrays.asList(
-                            new ItemStack(Material.SUGAR,16),
-                            new ItemStack(Material.REDSTONE, 32)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.murder")),
-                    Material.REDSTONE,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.murder_desc"))),
-                    "skill_assassin_murder",
-                    Arrays.asList(
-                            new ItemStack(Material.BLAZE_POWDER,48),
-                            new ItemStack(Material.DIAMOND,6)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.haste")),
-                    Material.NETHERITE_SWORD,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.haste_desc"))),
-                    "skill_assassin_haste",
-                    Arrays.asList(
-                            new ItemStack(Material.DIAMOND, 8),
-                            new ItemStack(Material.GOLD_INGOT, 32),
-                            new ItemStack(Material.EMERALD, 64)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.vampirism")),
-                    Material.TIPPED_ARROW,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.vampirism_desc"))),
-                    "skill_assassin_vampirism",
-                    Arrays.asList(
-                            new ItemStack(Material.ANCIENT_DEBRIS,3),
-                            new ItemStack(Material.GOLDEN_APPLE, 16)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.recovery")),
-                    Material.NETHER_STAR,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.assassin.recovery_desc"))),
-                    "skill_assassin_recovery",
-                    Arrays.asList(
-                            new ItemStack(Material.NETHER_STAR,1),
-                            new ItemStack(Material.NETHERITE_INGOT,3),
-                            new ItemStack(Material.GOLDEN_APPLE, 48)
-                    )
-            ));
-        }
-
-        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_trader")) {
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.luck")),
-                    Material.EMERALD,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.luck_desc"))),
-                    "class_trader_luck",
-                    Arrays.asList(
-                            new ItemStack(Material.DIAMOND,1),
-                            new ItemStack(Material.EMERALD,32)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.exp")),
-                    Material.EXPERIENCE_BOTTLE,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.exp_desc"))),
-                    "class_trader_exp",
-                    Arrays.asList(
-                            new ItemStack(Material.EMERALD_BLOCK, 16),
-                            new ItemStack(Material.DIAMOND,8),
-                            new ItemStack(Material.EXPERIENCE_BOTTLE,32)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.run")),
-                    Material.FEATHER,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.run_desc"))),
-                    "class_trader_run",
-                    Arrays.asList(
-                            new ItemStack(Material.SUGAR, 1024),
-                            new ItemStack(Material.EMERALD_BLOCK,32),
-                            new ItemStack(Material.GOLDEN_APPLE, 8)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.hero")),
-                    Material.EMERALD_BLOCK,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.hero_desc"))),
-                    "class_trader_hero",
-                    Arrays.asList(
-                            new ItemStack(Material.ANCIENT_DEBRIS,2),
-                            new ItemStack(Material.EMERALD_BLOCK,128)
-                    )
-            ));
-
-            skills.add(new SkillData(
-                    MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.blessing")),
-                    Material.TOTEM_OF_UNDYING,
-                    Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("skills_gui.skills.trader.blessing_desc"))),
-                    "class_trader_blessing",
-                    Arrays.asList(
-                            new ItemStack(Material.TOTEM_OF_UNDYING,1),
-                            new ItemStack(Material.NETHERITE_INGOT, 3),
-                            new ItemStack(Material.NETHER_STAR,1)
-                    )
-            ));
-        }
-        return skills;
-    }
 }

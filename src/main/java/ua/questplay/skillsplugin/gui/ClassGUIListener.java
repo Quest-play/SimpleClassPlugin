@@ -26,18 +26,18 @@ public class ClassGUIListener implements Listener {
 
         switch (slot) {
             case 9:
-                plugin.getDbManager().savePlayerClass(player.getUniqueId(), "class_assassin");
-                player.sendMessage(plugin.getMessageFromKey("class_command.class_list.assassin_given"));
+                plugin.getDbManager().savePlayerClass(player.getUniqueId(), "class_killer");
+                player.sendMessage(plugin.formattedFromKey("class_command.class_list.assassin_given"));
                 inventory.close();
                 break;
             case 10:
                 plugin.getDbManager().savePlayerClass(player.getUniqueId(),"class_thief");
-                player.sendMessage(plugin.getMessageFromKey("class_command.class_list.thief_given"));
+                player.sendMessage(plugin.formattedFromKey("class_command.class_list.thief_given"));
                 inventory.close();
                 break;
             case 11:
-                plugin.getDbManager().savePlayerClass(player.getUniqueId(),"class_trader");
-                player.sendMessage(plugin.getMessageFromKey("class_command.class_list.trader_given"));
+                plugin.getDbManager().savePlayerClass(player.getUniqueId(),"class_merchant");
+                player.sendMessage(plugin.formattedFromKey("class_command.class_list.trader_given"));
                 inventory.close();
                 break;
             case 12:

@@ -87,6 +87,12 @@ public class DatabaseManager {
         return false;
     }
 
+    public String getPlayerClass() {
+        String sql = "";
+
+        return null;
+    }
+
     public boolean hasPlayerClass(UUID uuid, String player_class) {
         String sql = "SELECT player_class, uuid FROM player_data WHERE uuid = ? AND player_class = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

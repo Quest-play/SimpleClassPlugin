@@ -2,7 +2,6 @@ package ua.questplay.skillsplugin.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -10,12 +9,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.ClassGUI;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ClassCommand implements CommandExecutor {
@@ -28,28 +25,26 @@ public class ClassCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getMessageFromKey("restrict.onlyplayer"));
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
             return true;
         }
 
-        Player player = (Player) sender;
-
         //GUI Components
         Component frameName = Component.text("");
-        List<Component> framLore = Arrays.asList(Component.text(""));
+        List<Component> framLore = List.of(Component.text(""));
 
-        Component killerName = MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("class_command.class_gui.killer")).decoration(TextDecoration.ITALIC, false);
-        Component thiefName = Component.text(plugin.getMessageFromKey("class_command.class_gui.thief")).color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
-        Component traderName = Component.text(plugin.getMessageFromKey("class_command.class_gui.trader")).color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+        Component killerName = plugin.formattedFromKey("class_command.class_gui.killer");
+        Component thiefName = plugin.formattedFromKey("class_command.class_gui.thief");
+        Component traderName = plugin.formattedFromKey("class_command.class_gui.trader");
 
-        List<Component> killerLore = Arrays.asList(MiniMessage.miniMessage().deserialize(plugin.getMessageFromKey("class_command.class_gui.lore.killer")));
-        List<Component> thiefLore = Arrays.asList(Component.text(plugin.getMessageFromKey("class_command.class_gui.lore.thief")).color(NamedTextColor.DARK_PURPLE));
-        List<Component> traderLore = Arrays.asList(Component.text(plugin.getMessageFromKey("class_command.class_gui.lore.trader")).color(NamedTextColor.DARK_PURPLE));
+        List<Component> killerLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.killer"));
+        List<Component> thiefLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.thief"));
+        List<Component> traderLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.trader"));
 
         // Damn. You already have a game class.
         if (plugin.getDbManager().hasClass(player.getUniqueId())) {
-            player.sendMessage(plugin.getMessageFromKey("class_command.already_have_class"));
+            player.sendMessage(plugin.formattedFromKey("class_command.already_have_class"));
             return true;
         }
 
