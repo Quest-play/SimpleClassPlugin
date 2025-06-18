@@ -1,5 +1,7 @@
 package ua.questplay.skillsplugin.db;
 
+import ua.questplay.skillsplugin.SkillsPlugin;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +11,12 @@ import java.util.*;
 
 public class DatabaseManager {
     private Connection connection;
+    private final SkillsPlugin plugin;
+
+    public DatabaseManager(SkillsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
 
     public void connect() {
         try {
@@ -16,7 +24,7 @@ public class DatabaseManager {
             connection = DriverManager.getConnection(url);
 
             createTables();
-            System.out.println("Database connected!");
+            plugin.getLogger().info("Database connected!");
         } catch (SQLException e) {
             e.printStackTrace();
         }

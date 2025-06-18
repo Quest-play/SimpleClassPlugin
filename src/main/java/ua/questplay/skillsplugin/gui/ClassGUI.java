@@ -14,10 +14,8 @@ import java.util.List;
 
 public class ClassGUI implements InventoryHolder {
     private final Inventory inventory;
-    private final String title;
 
     public ClassGUI(String title, int size) {
-        this.title = title;
         this.inventory = Bukkit.createInventory(this, size, title);
     }
 
@@ -43,9 +41,5 @@ public class ClassGUI implements InventoryHolder {
     @Override
     public @NotNull Inventory getInventory() {
         return inventory;
-    }
-
-    public String getTitle() {
-        return title;
     }
 }

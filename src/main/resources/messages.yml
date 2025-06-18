@@ -75,7 +75,7 @@ skills_gui:
       recovery_desc1: "Владелец получает: Эффект <white>Скорость III<dark_purple> на 6 секунд,"
       recovery_desc2: "<white>Сопротивление II<dark_purple> на 5 секунд, <white>Регенерация I<dark_purple> на 30 секунд."
 
-    trader:
+    merchant:
       luck: "<yellow>Удача торговца"
       luck_desc: "Когда владелец копает руду."
       luck_desc1: "С шансом 35% добавляет к добытой руде 2-4 руды"

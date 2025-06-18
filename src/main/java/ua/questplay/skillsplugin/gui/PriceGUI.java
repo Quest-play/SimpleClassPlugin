@@ -14,10 +14,8 @@ import java.util.List;
 
 public class PriceGUI implements InventoryHolder {
     private final Inventory inventory;
-    private final Component title;
 
     public PriceGUI(Component title, int size) {
-        this.title = title;
         this.inventory = Bukkit.createInventory(this, size, title);
     }
 
@@ -57,6 +55,6 @@ public class PriceGUI implements InventoryHolder {
 
     @Override
     public @NotNull Inventory getInventory() {
-        return null;
+        return inventory;
     }
 }

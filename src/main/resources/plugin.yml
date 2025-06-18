@@ -7,11 +7,6 @@ description: "Adds simple game classes"
 website: ""
 softdepend: [Vault]
 commands:
-
-  testmenu:
-    description: "Открывает тестовое меню"
-    usage: /testmenu
-
   class:
     description: "Выбор класса"
     usage: /class

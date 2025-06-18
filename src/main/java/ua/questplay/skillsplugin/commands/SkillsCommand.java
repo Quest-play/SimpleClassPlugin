@@ -1,7 +1,6 @@
 package ua.questplay.skillsplugin.commands;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +12,6 @@ import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.SkillsGUI;
 import ua.questplay.skillsplugin.skills.SkillType;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SkillsCommand implements CommandExecutor {
@@ -28,6 +26,11 @@ public class SkillsCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
+            return true;
+        }
+
+        if (!plugin.getDbManager().hasClass(player.getUniqueId())) {
+            sender.sendMessage(plugin.formattedFromKey("class_command.choose_class"));
             return true;
         }
         SkillsGUI skillsGUI = new SkillsGUI(plugin.formattedFromKey("skills_gui.title"),54);
@@ -51,11 +54,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData killerRecovery = plugin.getSkillManager().getSkill(SkillType.KILLER_RECOVERY);
 
 
-            skillsGUI.addItem(9, killerSpeed.getIcon(), killerSpeed.getName(), killerSpeed.getDescription());
-            skillsGUI.addItem(10, killerMurder.getIcon(), killerMurder.getName(), killerMurder.getDescription());
-            skillsGUI.addItem(11, killerHaste.getIcon(), killerHaste.getName(), killerHaste.getDescription());
-            skillsGUI.addItem(12, killerVampirism.getIcon(), killerVampirism.getName(), killerVampirism.getDescription());
-            skillsGUI.addItem(13, killerRecovery.getIcon(), killerRecovery.getName(), killerRecovery.getDescription());
+            skillsGUI.addItem(9, killerSpeed.icon(), killerSpeed.name(), killerSpeed.description());
+            skillsGUI.addItem(10, killerMurder.icon(), killerMurder.name(), killerMurder.description());
+            skillsGUI.addItem(11, killerHaste.icon(), killerHaste.name(), killerHaste.description());
+            skillsGUI.addItem(12, killerVampirism.icon(), killerVampirism.name(), killerVampirism.description());
+            skillsGUI.addItem(13, killerRecovery.icon(), killerRecovery.name(), killerRecovery.description());
         }
         //-------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_merchant")) {
@@ -66,11 +69,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData merchant_blessing = plugin.getSkillManager().getSkill(SkillType.MERCHANT_BLESSING);
 
 
-            skillsGUI.addItem(9, merchant_luck.getIcon(), merchant_luck.getName(), merchant_luck.getDescription());
-            skillsGUI.addItem(10, merchant_exp.getIcon(), merchant_exp.getName(), merchant_exp.getDescription());
-            skillsGUI.addItem(11, merchant_run.getIcon(), merchant_run.getName(), merchant_run.getDescription());
-            skillsGUI.addItem(12, merchant_hero.getIcon(), merchant_hero.getName(), merchant_hero.getDescription());
-            skillsGUI.addItem(13, merchant_blessing.getIcon(), merchant_blessing.getName(), merchant_blessing.getDescription());
+            skillsGUI.addItem(9, merchant_luck.icon(), merchant_luck.name(), merchant_luck.description());
+            skillsGUI.addItem(10, merchant_exp.icon(), merchant_exp.name(), merchant_exp.description());
+            skillsGUI.addItem(11, merchant_run.icon(), merchant_run.name(), merchant_run.description());
+            skillsGUI.addItem(12, merchant_hero.icon(), merchant_hero.name(), merchant_hero.description());
+            skillsGUI.addItem(13, merchant_blessing.icon(), merchant_blessing.name(), merchant_blessing.description());
         }
         //--------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
@@ -81,11 +84,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData thief_specialization = plugin.getSkillManager().getSkill(SkillType.THIEF_SPECIALIZATION);
 
 
-            skillsGUI.addItem(9, thief_speed.getIcon(), thief_speed.getName(), thief_speed.getDescription());
-            skillsGUI.addItem(10, thief_haste.getIcon(), thief_haste.getName(), thief_haste.getDescription());
-            skillsGUI.addItem(11, thief_exp.getIcon(), thief_exp.getName(), thief_exp.getDescription());
-            skillsGUI.addItem(12, thief_caution.getIcon(), thief_caution.getName(), thief_caution.getDescription());
-            skillsGUI.addItem(13, thief_specialization.getIcon(), thief_specialization.getName(), thief_specialization.getDescription());
+            skillsGUI.addItem(9, thief_speed.icon(), thief_speed.name(), thief_speed.description());
+            skillsGUI.addItem(10, thief_haste.icon(), thief_haste.name(), thief_haste.description());
+            skillsGUI.addItem(11, thief_exp.icon(), thief_exp.name(), thief_exp.description());
+            skillsGUI.addItem(12, thief_caution.icon(), thief_caution.name(), thief_caution.description());
+            skillsGUI.addItem(13, thief_specialization.icon(), thief_specialization.name(), thief_specialization.description());
         }
 
 

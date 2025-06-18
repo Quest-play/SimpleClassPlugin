@@ -14,10 +14,8 @@ import java.util.List;
 
 public class SkillsGUI implements InventoryHolder {
     private final Inventory inventory;
-    private final Component title;
 
     public SkillsGUI(Component title, int size) {
-        this.title = title;
         this.inventory = Bukkit.createInventory(this, size, title);
     }
 
@@ -42,6 +40,6 @@ public class SkillsGUI implements InventoryHolder {
 
     @Override
     public @NotNull Inventory getInventory() {
-        return null;
+        return inventory;
     }
 }

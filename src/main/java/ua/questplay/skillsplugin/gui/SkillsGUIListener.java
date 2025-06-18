@@ -1,7 +1,6 @@
 package ua.questplay.skillsplugin.gui;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,8 +49,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.KILLER_SPEED);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -64,8 +63,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.KILLER_MURDER);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -78,8 +77,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.KILLER_HASTE);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -92,8 +91,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.KILLER_VAMPIRISM);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -106,8 +105,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.KILLER_RECOVERY);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -124,8 +123,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.THIEF_SPEED);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -138,8 +137,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.THIEF_HASTE);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -152,8 +151,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.THIEF_EXP);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -166,8 +165,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.THIEF_CAUTION);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -180,8 +179,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.THIEF_SPECIALIZATION);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -198,8 +197,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.MERCHANT_LUCK);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -212,8 +211,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.MERCHANT_EXP);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -226,8 +225,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.MERCHANT_RUN);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -240,8 +239,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.MERCHANT_HERO);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -254,8 +253,8 @@ public class SkillsGUIListener implements Listener {
                     if (event.isRightClick()) {
                         int pos = 9;
                         SkillData skillData = plugin.getSkillManager().getSkill(SkillType.MERCHANT_BLESSING);
-                        for (int i = 0; i < skillData.getPrice().size(); i++) {
-                            priceGUI.addItemCount(pos, skillData.getPrice().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.getPrice().get(i).getAmount());
+                        for (int i = 0; i < skillData.price().size(); i++) {
+                            priceGUI.addItemCount(pos, skillData.price().get(i).getType(), Component.text(""), List.of(Component.text("")), skillData.price().get(i).getAmount());
                             pos++;
                         }
                         priceGUI.open(player);
@@ -275,12 +274,12 @@ public class SkillsGUIListener implements Listener {
             return;
         }
 
-        if (!hasRequiredResources(player, skill.getPrice())) {
+        if (!hasRequiredResources(player, skill.price())) {
             player.sendMessage(plugin.formattedFromKey("skills_gui.no_res"));
             return;
         }
 
-        takeResources(player, skill.getPrice());
+        takeResources(player, skill.price());
         plugin.getDbManager().addSkill(player.getUniqueId(), tag);
 
 

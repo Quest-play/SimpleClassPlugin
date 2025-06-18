@@ -17,12 +17,13 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.codemc.org/repository/maven-public' }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
-    //compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+    compileOnly "net.milkbowl.vault:VaultUnlockedAPI:2.11"
 }
 
 tasks {

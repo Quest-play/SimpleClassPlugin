@@ -1,23 +1,22 @@
 # If use_currency = true.
 # Setting prices for skills
-currency_price:
-  thief:
-    speed: 100
-    haste: 100
-    stole_exp: 100
-    caution: 100
-    specialization: 100
+thief:
+  speed: 100
+  haste: 100
+  stole_exp: 100
+  caution: 100
+  specialization: 100
 
-  assassin:
-    speed: 100
-    murder: 100
-    haste: 100
-    vampirism: 100
-    recovery: 100
+killer:
+  speed: 100
+  murder: 100
+  haste: 100
+  vampirism: 100
+  recovery: 100
 
-  trader:
-    luck: 100
-    exp: 100
-    run: 100
-    hero: 100
-    blessing: 100
+merchant:
+  luck: 100
+  exp: 100
+  run: 100
+  hero: 100
+  blessing: 100
