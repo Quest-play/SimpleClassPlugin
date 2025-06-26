@@ -5,7 +5,9 @@ api-version: '1.21'
 authors: [ Quest_play ]
 description: "Adds simple game classes"
 website: ""
-softdepend: [Vault]
+depend: [ Vault ]
+database: true
+
 commands:
   class:
     description: "Выбор класса"

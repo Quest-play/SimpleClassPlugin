@@ -39,11 +39,11 @@ public class SkillsCommand implements CommandExecutor {
         List<Component> frameLore = List.of(Component.text(""));
 
         for (int i = 0; i < 9; i++) {
-            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore);
+            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore, false);
         }
 
         for (int i = 45; i < 54; i++) {
-            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore);
+            skillsGUI.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, frameLore, false);
         }
 
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_killer")) {
@@ -54,11 +54,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData killerRecovery = plugin.getSkillManager().getSkill(SkillType.KILLER_RECOVERY);
 
 
-            skillsGUI.addItem(9, killerSpeed.icon(), killerSpeed.name(), killerSpeed.description());
-            skillsGUI.addItem(10, killerMurder.icon(), killerMurder.name(), killerMurder.description());
-            skillsGUI.addItem(11, killerHaste.icon(), killerHaste.name(), killerHaste.description());
-            skillsGUI.addItem(12, killerVampirism.icon(), killerVampirism.name(), killerVampirism.description());
-            skillsGUI.addItem(13, killerRecovery.icon(), killerRecovery.name(), killerRecovery.description());
+            skillsGUI.addItem(9, killerSpeed.icon(), killerSpeed.name(), killerSpeed.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_speed"));
+            skillsGUI.addItem(10, killerMurder.icon(), killerMurder.name(), killerMurder.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_murder"));
+            skillsGUI.addItem(11, killerHaste.icon(), killerHaste.name(), killerHaste.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_haste"));
+            skillsGUI.addItem(12, killerVampirism.icon(), killerVampirism.name(), killerVampirism.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_vampirism"));
+            skillsGUI.addItem(13, killerRecovery.icon(), killerRecovery.name(), killerRecovery.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_recovery"));
         }
         //-------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_merchant")) {
@@ -69,11 +69,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData merchant_blessing = plugin.getSkillManager().getSkill(SkillType.MERCHANT_BLESSING);
 
 
-            skillsGUI.addItem(9, merchant_luck.icon(), merchant_luck.name(), merchant_luck.description());
-            skillsGUI.addItem(10, merchant_exp.icon(), merchant_exp.name(), merchant_exp.description());
-            skillsGUI.addItem(11, merchant_run.icon(), merchant_run.name(), merchant_run.description());
-            skillsGUI.addItem(12, merchant_hero.icon(), merchant_hero.name(), merchant_hero.description());
-            skillsGUI.addItem(13, merchant_blessing.icon(), merchant_blessing.name(), merchant_blessing.description());
+            skillsGUI.addItem(9, merchant_luck.icon(), merchant_luck.name(), merchant_luck.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_luck"));
+            skillsGUI.addItem(10, merchant_exp.icon(), merchant_exp.name(), merchant_exp.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_exp"));
+            skillsGUI.addItem(11, merchant_run.icon(), merchant_run.name(), merchant_run.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_run"));
+            skillsGUI.addItem(12, merchant_hero.icon(), merchant_hero.name(), merchant_hero.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_hero"));
+            skillsGUI.addItem(13, merchant_blessing.icon(), merchant_blessing.name(), merchant_blessing.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_blessing"));
         }
         //--------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
@@ -84,11 +84,11 @@ public class SkillsCommand implements CommandExecutor {
             SkillData thief_specialization = plugin.getSkillManager().getSkill(SkillType.THIEF_SPECIALIZATION);
 
 
-            skillsGUI.addItem(9, thief_speed.icon(), thief_speed.name(), thief_speed.description());
-            skillsGUI.addItem(10, thief_haste.icon(), thief_haste.name(), thief_haste.description());
-            skillsGUI.addItem(11, thief_exp.icon(), thief_exp.name(), thief_exp.description());
-            skillsGUI.addItem(12, thief_caution.icon(), thief_caution.name(), thief_caution.description());
-            skillsGUI.addItem(13, thief_specialization.icon(), thief_specialization.name(), thief_specialization.description());
+            skillsGUI.addItem(9, thief_speed.icon(), thief_speed.name(), thief_speed.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_speed"));
+            skillsGUI.addItem(10, thief_haste.icon(), thief_haste.name(), thief_haste.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_haste"));
+            skillsGUI.addItem(11, thief_exp.icon(), thief_exp.name(), thief_exp.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_stole_exp"));
+            skillsGUI.addItem(12, thief_caution.icon(), thief_caution.name(), thief_caution.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_caution"));
+            skillsGUI.addItem(13, thief_specialization.icon(), thief_specialization.name(), thief_specialization.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_specialization"));
         }
 
 

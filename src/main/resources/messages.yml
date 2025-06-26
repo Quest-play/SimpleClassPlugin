@@ -28,10 +28,11 @@ class_command:
       trader: "Станешь ли ты мастером торговли?"
 
 skills_gui:
-  title: "<gold>Меню навыков"
+  title: "<black>Меню навыков"
   already_have: "<red>У вас уже есть этот навык!"
-  no_res: "<red>Недостаточно ресурсов!"
+  no_res: "<red>Недостаточно валюты!"
   purchased: "<green>Навык приобретён!"
+  price: "<yellow>Цена: <price>"
   skills:
     thief:
       speed: "<dark_green>Скорость Вора"
@@ -102,12 +103,14 @@ skills_gui:
 
 skill_effects:
   thief:
+    stole_exp: "<green>Ты украл <stolen_exp> опыта."
+    caution: "<green>Сопротивление активировано."
   killer:
     murder: "<green>Жажда убийства даёт силу!"
     vampirism: "<green>Вампиризм восстановил здоровье!"
     haste: "<green>Спешка убийцы проявляется!"
     recovery: "<green>Убийственное восстановление активировано!"
-  trader:
-
-price:
-  title: "<black>Цена"
+  merchant:
+    luck: "<gold>Удача + <bonus>"
+    exp: "<green>Получено + <exp> опыта."
+    blessing: "<green>Восстановлено <health>"

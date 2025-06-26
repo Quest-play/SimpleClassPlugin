@@ -18,12 +18,14 @@ repositories {
     }
     maven { url 'https://jitpack.io' }
     maven { url 'https://repo.codemc.org/repository/maven-public' }
+    maven { url 'https://repo.networkmanager.xyz/repository/maven-public/' }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
-    compileOnly "net.milkbowl.vault:VaultUnlockedAPI:2.11"
+    compileOnly "net.milkbowl.vault:VaultUnlockedAPI:2.12"
+    //compileOnly 'nl.chimpgamer.ultimatemobcoins:paper:1.8.0'
 }
 
 tasks {

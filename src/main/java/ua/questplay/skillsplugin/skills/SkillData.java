@@ -7,8 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * @param description Например, "skill_thief_speed"
- * @param price       Цена в предметах
- * @param currencyPrice Цена в валюте
+ * @param description Example, "skill_thief_speed"
+ * @param price       Price in currency
  */
-public record SkillData(Component name, Material icon, List<Component> description, List<ItemStack> price, int currencyPrice) { }
+public record SkillData(Component name, Material icon, List<Component> description, int price) { }

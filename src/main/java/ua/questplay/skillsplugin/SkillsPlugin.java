@@ -1,21 +1,30 @@
 package ua.questplay.skillsplugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.milkbowl.vault2.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import ua.questplay.skillsplugin.commands.ClassCommand;
 import ua.questplay.skillsplugin.commands.ReloadCommand;
 import ua.questplay.skillsplugin.commands.SkillsCommand;
 import ua.questplay.skillsplugin.commands.tabcompleters.ReloadCompleter;
 import ua.questplay.skillsplugin.db.DatabaseManager;
+import ua.questplay.skillsplugin.effects.KillerEffects;
+import ua.questplay.skillsplugin.effects.SkillPotion;
+import ua.questplay.skillsplugin.effects.ThiefEffects;
+import ua.questplay.skillsplugin.effects.TraderEffects;
 import ua.questplay.skillsplugin.gui.ClassGUIListener;
-import ua.questplay.skillsplugin.gui.PriceGUIListener;
 import ua.questplay.skillsplugin.gui.SkillsGUIListener;
+import ua.questplay.skillsplugin.listeners.JoinEvent;
 import ua.questplay.skillsplugin.skills.SkillData;
 import ua.questplay.skillsplugin.skills.SkillManager;
 import ua.questplay.skillsplugin.skills.SkillType;
@@ -24,33 +33,44 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
-public final class SkillsPlugin extends JavaPlugin {
+public final class SkillsPlugin extends JavaPlugin implements Listener {
     private DatabaseManager dbManager;
     private FileConfiguration config;
     private FileConfiguration messages;
     private FileConfiguration prices;
     private File messagesFile;
+
+    private static Economy economyModern = null;
+    private static net.milkbowl.vault.economy.Economy economyLegacy = null;
+
+
     private final SkillManager skillManager = new SkillManager();
+
+    public static Economy getEconomyModern() {
+        return economyModern;
+    }
+
+    public static net.milkbowl.vault.economy.Economy getEconomyLegacy() {
+        return economyLegacy;
+    }
 
     @Override
     public void onEnable() {
         dbManager = new DatabaseManager(this);
         dbManager.connect();
+
         saveDefaultConfig();
+        setupConfigFile();
         setupMessagesConfig();
         setupPricesConfig();
-        registerSkills();
 
+        registerSkills();
         registerCommands();
         registerEvents();
-    }
 
-    @Override
-    public void onLoad() {
-
+        SkillPotion effectApplier = new SkillPotion(this);
     }
 
     @Override
@@ -70,8 +90,22 @@ public final class SkillsPlugin extends JavaPlugin {
     }
 
     @Override
-    public FileConfiguration getConfig() {
+    public @NotNull FileConfiguration getConfig() {
         return config;
+    }
+
+    @EventHandler
+    public void onServiceRegister(ServiceRegisterEvent event) {
+        if (event.getProvider().getService() == net.milkbowl.vault.economy.Economy.class) {
+            economyLegacy = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
+            getLogger().info("Successfully hooked into Vault for economy!");
+            getLogger().info("Using Legacy Economy!");
+        }
+        if (event.getProvider().getService() == Economy.class) {
+            economyModern = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+            getLogger().info("Successfully hooked into Vault for economy!");
+            getLogger().info("Using Modern Economy!");
+        }
     }
 
     public FileConfiguration getMessages() {
@@ -106,6 +140,7 @@ public final class SkillsPlugin extends JavaPlugin {
 
     //Private
 
+
     //Register
     private void registerCommands() {
         getCommand("class").setExecutor(new ClassCommand(this));
@@ -118,25 +153,19 @@ public final class SkillsPlugin extends JavaPlugin {
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new ClassGUIListener(this),this);
         getServer().getPluginManager().registerEvents(new SkillsGUIListener(this), this);
-        getServer().getPluginManager().registerEvents(new PriceGUIListener(this), this);
-        /*
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new ThiefSkillsListener(this), this);
-        getServer().getPluginManager().registerEvents(new AssassinSkillsListener(this), this);
-        getServer().getPluginManager().registerEvents(new TraderSkillsListener(this), this);
-        getServer().getPluginManager().registerEvents(new TraderBlessListener(this), this);
-         */
+        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
+        getServer().getPluginManager().registerEvents(new TraderEffects(this), this);
+        getServer().getPluginManager().registerEvents(new ThiefEffects(this), this);
+        getServer().getPluginManager().registerEvents(new KillerEffects(this), this);
     }
 
     private void registerSkills() {
         skillManager.registerSkill(SkillType.KILLER_SPEED, new SkillData(
                 formattedFromKey("skills_gui.skills.killer.speed"),
                 Material.BLAZE_POWDER,
-                List.of(formattedFromKey("skills_gui.skills.killer.speed_desc")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.SUGAR,16),
-                        new ItemStack(Material.REDSTONE, 32)
+                List.of(formattedFromKey("skills_gui.skills.killer.speed_desc"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("killer.speed"))).build())
                 ),
                 prices.getInt("killer.speed")
         ));
@@ -145,11 +174,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.killer.murder"),
                 Material.REDSTONE,
                 List.of(formattedFromKey("skills_gui.skills.killer.murder_desc"),
-                        formattedFromKey("skills_gui.skills.killer.murder_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.BLAZE_POWDER,48),
-                        new ItemStack(Material.DIAMOND,6)
+                        formattedFromKey("skills_gui.skills.killer.murder_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("killer.murder"))).build())
                 ),
                 prices.getInt("killer.murder")
         ));
@@ -158,12 +184,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.killer.haste"),
                 Material.NETHERITE_SWORD,
                 List.of(formattedFromKey("skills_gui.skills.killer.haste_desc"),
-                        formattedFromKey("skills_gui.skills.killer.haste_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.DIAMOND, 8),
-                        new ItemStack(Material.GOLD_INGOT, 32),
-                        new ItemStack(Material.EMERALD, 64)
+                        formattedFromKey("skills_gui.skills.killer.haste_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("killer.haste"))).build())
                 ),
                 prices.getInt("killer.haste"))
         );
@@ -173,11 +195,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 Material.TIPPED_ARROW,
                 List.of(formattedFromKey("skills_gui.skills.killer.vampirism_desc"),
                         formattedFromKey("skills_gui.skills.killer.vampirism_desc1"),
-                        formattedFromKey("skills_gui.skills.killer.vampirism_desc2")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.ANCIENT_DEBRIS,3),
-                        new ItemStack(Material.GOLDEN_APPLE, 16)
+                        formattedFromKey("skills_gui.skills.killer.vampirism_desc2"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("killer.vampirism"))).build())
                 ),
                 prices.getInt("killer.vampirism")
         ));
@@ -187,12 +206,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 Material.NETHER_STAR,
                 List.of(formattedFromKey("skills_gui.skills.killer.recovery_desc"),
                         formattedFromKey("skills_gui.skills.killer.recovery_desc1"),
-                        formattedFromKey("skills_gui.skills.killer.recovery_desc2")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.NETHER_STAR,1),
-                        new ItemStack(Material.NETHERITE_INGOT,3),
-                        new ItemStack(Material.GOLDEN_APPLE, 48)
+                        formattedFromKey("skills_gui.skills.killer.recovery_desc2"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("killer.recovery"))).build())
                 ),
                 prices.getInt("killer.recovery")
         ));
@@ -200,11 +215,8 @@ public final class SkillsPlugin extends JavaPlugin {
         skillManager.registerSkill(SkillType.THIEF_SPEED, new SkillData(
                 formattedFromKey("skills_gui.skills.thief.speed"),
                 Material.FEATHER,
-                List.of(formattedFromKey("skills_gui.skills.thief.speed_desc")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.SUGAR, 64), // 3 зелья скорости I
-                        new ItemStack(Material.GOLD_INGOT, 16)
+                List.of(formattedFromKey("skills_gui.skills.thief.speed_desc"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("thief.speed"))).build())
                 ),
                 prices.getInt("thief.speed")
         ));
@@ -212,12 +224,8 @@ public final class SkillsPlugin extends JavaPlugin {
         skillManager.registerSkill(SkillType.THIEF_HASTE, new SkillData(
                 formattedFromKey("skills_gui.skills.thief.haste"),
                 Material.GOLDEN_SWORD,
-                List.of(formattedFromKey("skills_gui.skills.thief.haste_desc")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.SUGAR, 96),
-                        new ItemStack(Material.BLAZE_POWDER, 32),
-                        new ItemStack(Material.GOLDEN_APPLE, 1)
+                List.of(formattedFromKey("skills_gui.skills.thief.haste_desc"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("thief.haste"))).build())
                 ),
                 prices.getInt("thief.haste")
         ));
@@ -227,13 +235,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 Material.EXPERIENCE_BOTTLE,
                 List.of(formattedFromKey("skills_gui.skills.thief.stole_exp_desc"),
                         formattedFromKey("skills_gui.skills.thief.stole_exp_desc1"),
-                        formattedFromKey("skills_gui.skills.thief.stole_exp_desc2")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.EXPERIENCE_BOTTLE, 64),
-                        new ItemStack(Material.EMERALD, 12),
-                        new ItemStack(Material.DIAMOND, 2),
-                        new ItemStack(Material.COPPER_INGOT, 64)
+                        formattedFromKey("skills_gui.skills.thief.stole_exp_desc2"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("thief.stole_exp"))).build())
                 ),
                 prices.getInt("thief.stole_exp")
         ));
@@ -242,11 +245,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.thief.caution"),
                 Material.LEATHER_BOOTS,
                 List.of(formattedFromKey("skills_gui.skills.thief.caution_desc"),
-                        formattedFromKey("skills_gui.skills.thief.caution_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.ANCIENT_DEBRIS, 3),
-                        new ItemStack(Material.GOLDEN_APPLE, 10)
+                        formattedFromKey("skills_gui.skills.thief.caution_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("thief.caution"))).build())
                 ),
                 prices.getInt("thief.caution")
         ));
@@ -255,13 +255,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.thief.specialization"),
                 Material.WOODEN_SWORD,
                 List.of(formattedFromKey("skills_gui.skills.thief.specialization_desc"),
-                        formattedFromKey("skills_gui.skills.thief.specialization_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.SUGAR, 256),
-                        new ItemStack(Material.BLAZE_POWDER, 128),
-                        new ItemStack(Material.NETHERITE_INGOT, 3),
-                        new ItemStack(Material.GOLDEN_APPLE, 4)
+                        formattedFromKey("skills_gui.skills.thief.specialization_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("thief.specialization"))).build())
                 ),
                 prices.getInt("thief.specialization")
         ));
@@ -270,11 +265,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.merchant.luck"),
                 Material.EMERALD,
                 List.of(formattedFromKey("skills_gui.skills.merchant.luck_desc"),
-                        formattedFromKey("skills_gui.skills.merchant.luck_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.DIAMOND,1),
-                        new ItemStack(Material.EMERALD,32)
+                        formattedFromKey("skills_gui.skills.merchant.luck_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("merchant.luck"))).build())
                 ),
                 prices.getInt("merchant.luck")
         ));
@@ -283,12 +275,8 @@ public final class SkillsPlugin extends JavaPlugin {
                 formattedFromKey("skills_gui.skills.merchant.exp"),
                 Material.EXPERIENCE_BOTTLE,
                 List.of(formattedFromKey("skills_gui.skills.merchant.exp_desc"),
-                        formattedFromKey("skills_gui.skills.merchant.exp_desc1")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.EMERALD_BLOCK, 16),
-                        new ItemStack(Material.DIAMOND,8),
-                        new ItemStack(Material.EXPERIENCE_BOTTLE,32)
+                        formattedFromKey("skills_gui.skills.merchant.exp_desc1"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("merchant.exp"))).build())
                 ),
                 prices.getInt("merchant.exp")
         ));
@@ -301,12 +289,8 @@ public final class SkillsPlugin extends JavaPlugin {
                         formattedFromKey("skills_gui.skills.merchant.run_desc2"),
                         formattedFromKey("skills_gui.skills.merchant.run_desc3"),
                         formattedFromKey("skills_gui.skills.merchant.run_desc4"),
-                        formattedFromKey("skills_gui.skills.merchant.run_desc5")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.SUGAR, 384),
-                        new ItemStack(Material.EMERALD_BLOCK,32),
-                        new ItemStack(Material.GOLDEN_APPLE, 8)
+                        formattedFromKey("skills_gui.skills.merchant.run_desc5"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("merchant.run"))).build())
                 ),
                 prices.getInt("merchant.run")
         ));
@@ -314,11 +298,8 @@ public final class SkillsPlugin extends JavaPlugin {
         skillManager.registerSkill(SkillType.MERCHANT_HERO, new SkillData(
                 formattedFromKey("skills_gui.skills.merchant.hero"),
                 Material.EMERALD_BLOCK,
-                List.of(formattedFromKey("skills_gui.skills.merchant.hero_desc")
-                ),
-                Arrays.asList(
-                        new ItemStack(Material.ANCIENT_DEBRIS,2),
-                        new ItemStack(Material.EMERALD_BLOCK,128)
+                List.of(formattedFromKey("skills_gui.skills.merchant.hero_desc"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("merchant.hero"))).build())
                 ),
                 prices.getInt("merchant.hero")
 
@@ -327,13 +308,11 @@ public final class SkillsPlugin extends JavaPlugin {
         skillManager.registerSkill(SkillType.MERCHANT_BLESSING, new SkillData(
                 formattedFromKey("skills_gui.skills.merchant.blessing"),
                 Material.TOTEM_OF_UNDYING,
-                List.of(formattedFromKey("skills_gui.skills.merchant.blessing_desc")
+                List.of(formattedFromKey("skills_gui.skills.merchant.blessing_desc"),
+                        formattedFromKey("skills_gui.skills.merchant.blessing_desc1"),
+                        formattedFromKey("skills_gui.skills.merchant.blessing_desc2"),
+                        formattedFromKey("skills_gui.price").replaceText(TextReplacementConfig.builder().matchLiteral("<price>").replacement(String.valueOf(prices.getInt("merchant.blessing"))).build())
                         ),
-                Arrays.asList(
-                        new ItemStack(Material.TOTEM_OF_UNDYING,1),
-                        new ItemStack(Material.NETHERITE_INGOT, 3),
-                        new ItemStack(Material.NETHER_STAR,1)
-                ),
                 prices.getInt("merchant.blessing")
         ));
     }
@@ -357,6 +336,12 @@ public final class SkillsPlugin extends JavaPlugin {
         }
 
         prices = YamlConfiguration.loadConfiguration(pricesFile);
+    }
+
+    private void setupConfigFile() {
+        File configFile = new File(getDataFolder(), "config.yml");
+
+        config = YamlConfiguration.loadConfiguration(configFile);
     }
 
     public FileConfiguration getPrices() {

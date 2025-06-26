@@ -1,5 +1,5 @@
 # Config
-# Allows you to use currency as payment for skills
-# Available options: Vault, false
-# Default = false
-use_currency: false
+#Enables messages for skill activation. true or false
+# Default: true
+skills_messages: true
+# Skill chances and delays
