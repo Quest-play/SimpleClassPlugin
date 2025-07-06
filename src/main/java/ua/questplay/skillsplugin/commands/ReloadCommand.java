@@ -3,11 +3,8 @@ package ua.questplay.skillsplugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ua.questplay.skillsplugin.SkillsPlugin;
-
-import java.math.BigDecimal;
 
 public class ReloadCommand implements CommandExecutor {
     private final SkillsPlugin plugin;
@@ -34,25 +31,7 @@ public class ReloadCommand implements CommandExecutor {
                 plugin.reloadMessages();
                 sender.sendMessage(plugin.formattedFromKey("config.messages"));
             }
-            case "test" -> {
-                hasMoney((Player) sender, 100);
-            }
             default -> sender.sendMessage(plugin.formattedFromKey("config.wrong"));
-        }
-        return true;
-    }
-
-    private boolean hasMoney(@NotNull Player player, int price) {
-        if (SkillsPlugin.getEconomyModern() != null) {
-            if (!SkillsPlugin.getEconomyModern().has(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(price))) {
-                player.sendMessage("no money modern");
-                return false;
-            }
-        } else {
-         if (!SkillsPlugin.getEconomyLegacy().has(player.getName(), price)) {
-             player.sendMessage("no money legacy");
-             return false;
-         }
         }
         return true;
     }

@@ -1,5 +1,5 @@
 name: SkillsPlugin
-version: '1.0.0'
+version: '1.0.1'
 main: ua.questplay.skillsplugin.SkillsPlugin
 api-version: '1.21'
 authors: [ Quest_play ]

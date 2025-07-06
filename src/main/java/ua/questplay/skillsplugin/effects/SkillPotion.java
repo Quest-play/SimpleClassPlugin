@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import ua.questplay.skillsplugin.SkillsPlugin;
+import ua.questplay.skillsplugin.skills.SkillType;
 
 public class SkillPotion {
     private final SkillsPlugin plugin;
@@ -32,24 +33,24 @@ public class SkillPotion {
     private void applyEffects(Player player) {
         ItemStack offHand = player.getInventory().getItemInOffHand();
 
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_speed")) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.THIEF_SPEED))) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.SPEED, 0));
         }
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_haste")) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.THIEF_HASTE))) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.HASTE, 0));
         }
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "killer_speed")) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.KILLER_SPEED))) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.SPEED, 0));
         }
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_hero")) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_HERO))) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.HERO_OF_THE_VILLAGE, 1));
         }
 
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_blessing") && offHand.getType() == Material.TOTEM_OF_UNDYING) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_BLESSING)) && offHand.getType() == Material.TOTEM_OF_UNDYING) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.HEALTH_BOOST, 2));
         }
 
-        if (plugin.getDbManager().hasSkill(player.getUniqueId(), "thief_specialization") && offHand.getType() != Material.SHIELD) {
+        if (plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.THIEF_SPECIALIZATION)) && offHand.getType() != Material.SHIELD) {
             player.addPotionEffect(createPermanentEffect(PotionEffectType.SPEED, 1));
             player.addPotionEffect(createPermanentEffect(PotionEffectType.HASTE, 1));
         }
@@ -57,10 +58,13 @@ public class SkillPotion {
     private PotionEffect createPermanentEffect(PotionEffectType type, int amplifier) {
         return new PotionEffect(
                 type,
-                25, // Длительность 1.25 секунды (обновляется каждый тик)
+                25,
                 amplifier,
                 true,
                 false
         );
+    }
+    private String skillTag(SkillType skillType) {
+        return plugin.getSkillManager().getSkill(skillType).tag();
     }
 }

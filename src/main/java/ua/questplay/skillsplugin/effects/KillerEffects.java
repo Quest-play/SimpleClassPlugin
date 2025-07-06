@@ -10,6 +10,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ua.questplay.skillsplugin.SkillsPlugin;
+import ua.questplay.skillsplugin.skills.SkillType;
 
 public class KillerEffects implements Listener {
     private final SkillsPlugin plugin;
@@ -22,18 +23,18 @@ public class KillerEffects implements Listener {
     public void onKillerMurder(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
 
-        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), "killer_murder")) return;
+        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_MURDER))) return;
 
         boolean isPlayerVictim = event.getEntity() instanceof Player;
 
         if (!isPlayerVictim) return;
 
-        if (Math.random() > 0.5) return;
+        if (Math.random() > plugin.getConfig().getDouble("killer.chances.murder")) return;
 
         attacker.addPotionEffect(new PotionEffect(
                 PotionEffectType.STRENGTH,
-                15 * 20,
-                0,
+                plugin.getConfig().getInt("killer.effects.skills.murder") * 20,
+                plugin.getConfig().getInt("killer.effects.effect_strength.murder_strength"),
                 true,
                 false
         ));
@@ -51,11 +52,11 @@ public class KillerEffects implements Listener {
 
         boolean isPlayerVictim = event.getEntity() instanceof Player;
 
-        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), "killer_vampirism")) return;
+        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_VAMPIRISM))) return;
 
         if (!isPlayerVictim) return;
 
-        if (Math.random() > 0.15) return;
+        if (Math.random() > plugin.getConfig().getDouble("killer.chances.vampirism")) return;
 
         double damage = 1.0;
         Player target = (Player) event.getEntity();
@@ -76,16 +77,16 @@ public class KillerEffects implements Listener {
 
         boolean isPlayerVictim = event.getEntity() instanceof Player;
 
-        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), "killer_haste")) return;
+        if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_HASTE))) return;
 
         if (!isPlayerVictim) return;
 
-        if (Math.random() > 0.15) return;
+        if (Math.random() > plugin.getConfig().getDouble("killer.chances.haste")) return;
 
         attacker.addPotionEffect(new PotionEffect(
                 PotionEffectType.HASTE,
-                10 * 20,
-                0,
+                plugin.getConfig().getInt("killer.effects.skills.haste") * 20,
+                plugin.getConfig().getInt("killer.effects.effect_strength.haste_strength"),
                 true,
                 false
         ));
@@ -102,28 +103,28 @@ public class KillerEffects implements Listener {
         Player killer = event.getEntity().getKiller();
         if (killer == null) return;
 
-        if (!plugin.getDbManager().hasSkill(killer.getUniqueId(), "killer_recovery")) return;
+        if (!plugin.getDbManager().hasSkill(killer.getUniqueId(), skillTag(SkillType.KILLER_RECOVERY))) return;
 
         killer.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
-                6 * 20,
-                2,
+                plugin.getConfig().getInt("killer.effects.skills.recovery.speed") * 20,
+                plugin.getConfig().getInt("killer.effects.effect_strength.recovery.speed_strength"),
                 true,
                 false
         ));
 
         killer.addPotionEffect(new PotionEffect(
                 PotionEffectType.RESISTANCE,
-                5 * 20,
-                1,
+                plugin.getConfig().getInt("killer.effects.skills.recovery.resistance") * 20,
+                plugin.getConfig().getInt("killer.effects.effect_strength.recovery.resistance_strength"),
                 true,
                 false
         ));
 
         killer.addPotionEffect(new PotionEffect(
                 PotionEffectType.REGENERATION,
-                30 * 20,
-                0,
+                plugin.getConfig().getInt("killer.effects.skills.recovery.regeneration") * 20,
+                plugin.getConfig().getInt("killer.effects.effect_strength.recovery.regeneration_strength"),
                 true,
                 false
         ));
@@ -137,5 +138,9 @@ public class KillerEffects implements Listener {
         event.getEntity().getWorld().spawnParticle(Particle.TRIAL_OMEN,
                 event.getEntity().getLocation().add(0, 2, 0),
                 6, 0.5, 0.5, 0.5);
+    }
+
+    private String skillTag(SkillType skillType) {
+        return plugin.getSkillManager().getSkill(skillType).tag();
     }
 }

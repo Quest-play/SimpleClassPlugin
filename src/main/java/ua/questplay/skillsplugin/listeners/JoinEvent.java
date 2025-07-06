@@ -6,8 +6,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import ua.questplay.skillsplugin.SkillsPlugin;
 
-import java.net.http.WebSocket;
-
 public class JoinEvent implements Listener {
     private final SkillsPlugin plugin;
 

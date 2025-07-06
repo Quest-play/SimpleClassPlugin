@@ -2,4 +2,59 @@
 #Enables messages for skill activation. true or false
 # Default: true
 skills_messages: true
+
 # Skill chances and delays
+killer:
+  chances:
+    murder: 0.5
+    haste: 0.15
+    vampirism: 0.15
+
+  effects:
+    effect_strength:
+      murder_strength: 0
+      haste_strength: 0
+      recovery:
+        speed_strength: 2
+        resistance_strength: 1
+        regeneration_strength: 0
+    skills:
+      murder: 15
+      haste: 10
+      recovery:
+        speed: 6
+        resistance: 5
+        regeneration: 30
+
+thief:
+    chances:
+      stole_exp: 0.15
+      caution: 0.08
+
+    effects:
+      duration:
+        resistance: 8
+
+      strength:
+        resistance: 0
+
+
+merchant:
+  chances:
+    luck: 0.35
+    exp: 0.45
+    blessing: 0.15
+
+  effects:
+    run:
+      duration:
+        effect1: 10
+        effect2: 10
+        effect3_speed: 15
+        effect3_resistance: 15
+
+      strength:
+        effect1: 0
+        effect2: 1
+        effect3_speed: 2
+        effect3_resistance: 0

@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ua.questplay.skillsplugin.SkillsPlugin;
+import ua.questplay.skillsplugin.skills.SkillType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +36,9 @@ public class TraderEffects implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_luck")) return;
+        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_LUCK))) return;
 
-        if (Math.random() > 0.35) return;
+        if (Math.random() > plugin.getConfig().getDouble("merchant.chances.luck")) return;
 
         Material dropType = getDropForOre(block.getType());
         if (dropType == null) return;
@@ -72,27 +73,31 @@ public class TraderEffects implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+    public void onMerchantRun(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player trader)) return;
 
-        if (!plugin.getDbManager().hasSkill(event.getEntity().getUniqueId(), "merchant_run")) return;
+        if (!plugin.getDbManager().hasSkill(event.getEntity().getUniqueId(), skillTag(SkillType.MERCHANT_RUN))) return;
 
         int hits = hitCounter.getOrDefault(trader, 0) + 1;
         hitCounter.put(trader, hits);
 
         if (hits == 1) {
-            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 0));
+            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, plugin.getConfig().getInt("merchant.effects.run.duration.effect1") * 20,
+                    plugin.getConfig().getInt("merchant.effects.run.strength.effect1")));
             trader.spawnParticle(Particle.DRIPPING_LAVA,
                     trader.getLocation().add(0, 2, 0),
                     5, 0.5, 0.5, 0.5);
         } else if (hits == 4) {
-            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
+            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, plugin.getConfig().getInt("merchant.effects.run.duration.effect2") * 20,
+                    plugin.getConfig().getInt("merchant.effects.run.strength.effect2")));
             trader.spawnParticle(Particle.LAVA,
                     trader.getLocation().add(0, 2, 0),
                     8, 0.5, 0.5, 0.5);
         } else if (hits >= 8) {
-            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15 * 20, 2));
-            trader.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 15 * 20, 0));
+            trader.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, plugin.getConfig().getInt("merchant.effects.run.duration.effect3_speed") * 20,
+                    plugin.getConfig().getInt("merchant.effects.run.strength.effect3_speed")));
+            trader.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, plugin.getConfig().getInt("merchant.effects.run.duration.effect3_resistance") * 20,
+                    plugin.getConfig().getInt("merchant.effects.run.strength.effect3_speed")));
             trader.spawnParticle(Particle.ANGRY_VILLAGER,
                     trader.getLocation().add(0, 2, 0),
                     12, 0.5, 0.5, 0.5);
@@ -106,12 +111,12 @@ public class TraderEffects implements Listener {
     }
 
     @EventHandler
-    public void onPlayerTrade(PlayerTradeEvent event) {
-        Player player = event.getPlayer();// Проверяем наличие навыка
-        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_exp")) return;
+    public void onMerchantTrade(PlayerTradeEvent event) {
+        Player player = event.getPlayer();
+        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_EXP))) return;
 
 
-        if (Math.random() > 0.45) return;
+        if (Math.random() > plugin.getConfig().getDouble("merchant.chances.exp")) return;
 
         int expGained = 5 + (int)(Math.random() * 21);
         player.giveExp(expGained);
@@ -127,17 +132,21 @@ public class TraderEffects implements Listener {
     }
 
     @EventHandler
-    public void onBlessing(EntityDamageEvent event) {
+    public void onMerchantBlessing(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), "merchant_blessing")) return;
+        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_BLESSING))) return;
 
-        if (Math.random() > 0.15) return;
+        if (Math.random() > plugin.getConfig().getDouble("merchant.chances.blessing")) return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 1));
 
         if (plugin.getConfig().getBoolean("skills_messages")) {
             player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.blessing").replaceText(TextReplacementConfig.builder().matchLiteral("<health>").replacement(String.valueOf(4)).build()));
         }
+    }
+
+    private String skillTag(SkillType skillType) {
+        return plugin.getSkillManager().getSkill(skillType).tag();
     }
 }
