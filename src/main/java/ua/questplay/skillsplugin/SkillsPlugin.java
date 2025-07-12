@@ -5,9 +5,13 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault2.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +40,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public final class SkillsPlugin extends JavaPlugin {
+public final class SkillsPlugin extends JavaPlugin implements Listener {
     private DatabaseManager dbManager;
     private FileConfiguration config;
     private FileConfiguration messages;
@@ -106,6 +110,19 @@ public final class SkillsPlugin extends JavaPlugin {
     @Override
     public @NotNull FileConfiguration getConfig() {
         return config;
+    }
+
+    @EventHandler
+    public void onServiceRegister(ServiceRegisterEvent event) {
+        if (event.getProvider().getService() == Economy.class) {
+            economyModern = Bukkit.getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+            getLogger().info("Successfully hooked into Vault for ModernEconomy!");
+        }
+
+        if (event.getProvider().getService() == net.milkbowl.vault.economy.Economy.class) {
+            economyLegacy = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
+            getLogger().info("Successfully hooked into Vault for LegacyEconomy!");
+        }
     }
 
     private boolean setupLegacyEconomy() {
@@ -199,6 +216,7 @@ public final class SkillsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MerchantEffects(this), this);
         getServer().getPluginManager().registerEvents(new ThiefEffects(this), this);
         getServer().getPluginManager().registerEvents(new KillerEffects(this), this);
+        getServer().getPluginManager().registerEvents(this, this);
     }
 
     private void registerSkills() {
