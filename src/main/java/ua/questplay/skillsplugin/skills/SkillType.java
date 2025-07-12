@@ -1,18 +1,21 @@
 package ua.questplay.skillsplugin.skills;
 
 public enum SkillType {
+    THIEF_MONEY,
     THIEF_SPEED,
     THIEF_HASTE,
     THIEF_EXP,
     THIEF_CAUTION,
     THIEF_SPECIALIZATION,
 
+    KILLER_MONEY,
     KILLER_SPEED,
     KILLER_MURDER,
     KILLER_HASTE,
     KILLER_VAMPIRISM,
     KILLER_RECOVERY,
 
+    MERCHANT_MONEY,
     MERCHANT_LUCK,
     MERCHANT_EXP,
     MERCHANT_RUN,

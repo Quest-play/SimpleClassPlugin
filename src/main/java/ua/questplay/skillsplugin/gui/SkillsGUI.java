@@ -1,6 +1,7 @@
 package ua.questplay.skillsplugin.gui;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,7 +22,7 @@ public class SkillsGUI implements InventoryHolder {
         this.inventory = Bukkit.createInventory(this, size, title);
     }
 
-    public void addItem(int slot, Material material, Component displayname, List<Component> lore, boolean glint) {
+    public void addItem(int slot, Material material, Component displayname, List<Component> lore, boolean hasSkill) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(displayname);
@@ -30,10 +31,11 @@ public class SkillsGUI implements InventoryHolder {
             meta.lore(lore);
         }
 
-        if (glint) {
+        if (hasSkill) {
             meta.addEnchant(Enchantment.UNBREAKING, 1 ,true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
+
 
 
         item.setItemMeta(meta);

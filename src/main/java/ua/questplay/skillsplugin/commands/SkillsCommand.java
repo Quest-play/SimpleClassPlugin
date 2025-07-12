@@ -1,6 +1,7 @@
 package ua.questplay.skillsplugin.commands;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,11 +13,12 @@ import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.SkillsGUI;
 import ua.questplay.skillsplugin.skills.SkillType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SkillsCommand implements CommandExecutor {
     private final SkillsPlugin plugin;
-    private final String skillTag = null;
+    private final List<Component> desc = new ArrayList<>();
 
     public SkillsCommand(SkillsPlugin plugin) {
         this.plugin = plugin;
@@ -48,54 +50,61 @@ public class SkillsCommand implements CommandExecutor {
 
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_killer")) {
             int slots = 9;
-            String[] thiefSkills  = {
-                    "KILLER_SPEED",
-                    "KILLER_MURDER",
-                    "KILLER_HASTE",
-                    "KILLER_VAMPIRISM",
-                    "KILLER_RECOVERY"
-            };
-            for (String skillName : thiefSkills) {
+            String[] killerSkills  = plugin.getDbManager().getSkillNames("KILLER");
+
+            for (String skillName : killerSkills) {
                 SkillType type = Enum.valueOf(SkillType.class, skillName);
                 SkillData skill = plugin.getSkillManager().getSkill(type);
 
-                skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag()));
+                desc.addAll(skill.description());
+                if (plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag())) {
+                    desc.addLast(plugin.formattedFromKey("skills_gui.tick"));
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), desc, true);
+                } else {
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), false);
+                }
+                desc.clear();
                 slots++;
             }
         }
         //-------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_merchant")) {
             int slots = 9;
-            String[] thiefSkills  = {
-                    "MERCHANT_LUCK",
-                    "MERCHANT_EXP",
-                    "MERCHANT_RUN",
-                    "MERCHANT_HERO",
-                    "MERCHANT_BLESSING"
-            };
-            for (String skillName : thiefSkills) {
+            String[] merchantSkills  = plugin.getDbManager().getSkillNames("MERCHANT");
+
+            for (String skillName : merchantSkills) {
                 SkillType type = Enum.valueOf(SkillType.class, skillName);
                 SkillData skill = plugin.getSkillManager().getSkill(type);
 
-                skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag()));
+                desc.addAll(skill.description());
+                if (plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag())) {
+                    desc.addLast(plugin.formattedFromKey("skills_gui.tick"));
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), desc, true);
+                } else {
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), false);
+                }
+                desc.clear();
                 slots++;
             }
         }
         //--------------------------------------------------------------------------------------------------------------
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
             int slots = 9;
-            String[] thiefSkills  = {
-                    "THIEF_SPEED",
-                    "THIEF_HASTE",
-                    "THIEF_EXP",
-                    "THIEF_CAUTION",
-                    "THIEF_SPECIALIZATION"
-            };
+            String[] thiefSkills  = plugin.getDbManager().getSkillNames("THIEF");
+
+
             for (String skillName : thiefSkills) {
                 SkillType type = Enum.valueOf(SkillType.class, skillName);
                 SkillData skill = plugin.getSkillManager().getSkill(type);
 
-                skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag()));
+                desc.addAll(skill.description());
+                if (plugin.getDbManager().hasSkill(player.getUniqueId(), skill.tag())) {
+                    desc.addLast(plugin.formattedFromKey("skills_gui.tick"));
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), desc, true);
+                } else {
+                    skillsGUI.addItem(slots, skill.icon(), skill.name(), skill.description(), false);
+                }
+                desc.clear();
                 slots++;
             }
         }

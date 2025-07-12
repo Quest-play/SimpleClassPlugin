@@ -12,14 +12,17 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import ua.questplay.skillsplugin.commands.ClassCommand;
+import ua.questplay.skillsplugin.commands.GiveSkillCommand;
 import ua.questplay.skillsplugin.commands.ReloadCommand;
 import ua.questplay.skillsplugin.commands.SkillsCommand;
+import ua.questplay.skillsplugin.commands.tabcompleters.GiveSkillCompleter;
+import ua.questplay.skillsplugin.commands.tabcompleters.NullCompleter;
 import ua.questplay.skillsplugin.commands.tabcompleters.ReloadCompleter;
 import ua.questplay.skillsplugin.db.DatabaseManager;
 import ua.questplay.skillsplugin.effects.KillerEffects;
 import ua.questplay.skillsplugin.effects.SkillPotion;
 import ua.questplay.skillsplugin.effects.ThiefEffects;
-import ua.questplay.skillsplugin.effects.TraderEffects;
+import ua.questplay.skillsplugin.effects.MerchantEffects;
 import ua.questplay.skillsplugin.gui.ClassGUIListener;
 import ua.questplay.skillsplugin.gui.SkillsGUIListener;
 import ua.questplay.skillsplugin.listeners.JoinEvent;
@@ -68,6 +71,8 @@ public final class SkillsPlugin extends JavaPlugin {
         registerCommands();
         registerEvents();
 
+        saveSkillsToDb();
+
         if (setupLegacyEconomy()) {
             getLogger().info("Vault connected successfully");
             getLogger().info("Using Legacy Economy.");
@@ -76,7 +81,7 @@ public final class SkillsPlugin extends JavaPlugin {
             getLogger().info("Using Modern Economy.");
         } else {
             getLogger().severe("Economy plugin not found!");
-            getServer().getPluginManager().disablePlugin(this);
+            //getServer().getPluginManager().disablePlugin(this);
         }
 
         SkillPotion effectApplier = new SkillPotion(this);
@@ -135,6 +140,12 @@ public final class SkillsPlugin extends JavaPlugin {
         return economyModern != null;
     }
 
+    private void saveSkillsToDb() {
+        for (SkillType skill : SkillType.values()) {
+            dbManager.addSkillName(skill.name());
+        }
+    }
+
     public FileConfiguration getMessages() {
         return messages;
     }
@@ -173,7 +184,11 @@ public final class SkillsPlugin extends JavaPlugin {
         getCommand("class").setExecutor(new ClassCommand(this));
         getCommand("reload").setExecutor(new ReloadCommand(this));
         getCommand("skills").setExecutor(new SkillsCommand(this));
+        getCommand("give_skill").setExecutor(new GiveSkillCommand(this));
 
+        getCommand("class").setTabCompleter(new NullCompleter());
+        getCommand("skills").setTabCompleter(new NullCompleter());
+        getCommand("give_skill").setTabCompleter(new GiveSkillCompleter(this));
         getCommand("reload").setTabCompleter(new ReloadCompleter());
     }
 
@@ -181,12 +196,23 @@ public final class SkillsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClassGUIListener(this),this);
         getServer().getPluginManager().registerEvents(new SkillsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
-        getServer().getPluginManager().registerEvents(new TraderEffects(this), this);
+        getServer().getPluginManager().registerEvents(new MerchantEffects(this), this);
         getServer().getPluginManager().registerEvents(new ThiefEffects(this), this);
         getServer().getPluginManager().registerEvents(new KillerEffects(this), this);
     }
 
     private void registerSkills() {
+        skillManager.registerSkill(SkillType.KILLER_MONEY, new SkillData(
+                formattedFromKey("skills_gui.skills.killer.money"),
+                Material.GOLD_NUGGET,
+                List.of(formattedFromKey("skills_gui.skills.killer.money_desc"),
+                        formattedFromKey("skills_gui.skills.killer.money_desc1"),
+                        formattedFromKey("skills_gui.skills.killer.money_desc2")
+                ),
+                prices.getInt("killer.money"),
+                "killer_money"
+        ));
+
         skillManager.registerSkill(SkillType.KILLER_SPEED, new SkillData(
                 formattedFromKey("skills_gui.skills.killer.speed"),
                 Material.BLAZE_POWDER,
@@ -243,6 +269,18 @@ public final class SkillsPlugin extends JavaPlugin {
                 "killer_recovery"
         ));
 
+        skillManager.registerSkill(SkillType.THIEF_MONEY, new SkillData(
+                formattedFromKey("skills_gui.skills.thief.money"),
+                Material.GOLD_NUGGET,
+                List.of(formattedFromKey("skills_gui.skills.thief.money_desc"),
+                        formattedFromKey("skills_gui.skills.thief.money_desc1"),
+                        formattedFromKey("skills_gui.skills.thief.money_desc2"),
+                        formattedFromKey("skills_gui.skills.thief.money_desc3")
+                ),
+                prices.getInt("thief.money"),
+                "thief_money"
+        ));
+
         skillManager.registerSkill(SkillType.THIEF_SPEED, new SkillData(
                 formattedFromKey("skills_gui.skills.thief.speed"),
                 Material.FEATHER,
@@ -295,6 +333,16 @@ public final class SkillsPlugin extends JavaPlugin {
                 ),
                 prices.getInt("thief.specialization"),
                 "thief_specialization"
+        ));
+
+        skillManager.registerSkill(SkillType.MERCHANT_MONEY, new SkillData(
+                formattedFromKey("skills_gui.skills.merchant.money"),
+                Material.GOLD_NUGGET,
+                List.of(formattedFromKey("skills_gui.skills.merchant.money_desc"),
+                        formattedFromKey("skills_gui.skills.merchant.money_desc1")
+                ),
+                prices.getInt("merchant.money"),
+                "merchant_money"
         ));
 
         skillManager.registerSkill(SkillType.MERCHANT_LUCK, new SkillData(

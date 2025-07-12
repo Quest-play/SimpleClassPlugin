@@ -1,5 +1,6 @@
 # Setting prices for skills
 thief:
+  money: 0
   speed: 100
   haste: 250
   stole_exp: 500
@@ -7,6 +8,7 @@ thief:
   specialization: 1000
 
 killer:
+  money: 0
   speed: 100
   murder: 250
   haste: 500
@@ -14,6 +16,7 @@ killer:
   recovery: 1000
 
 merchant:
+  money: 0
   luck: 100
   exp: 250
   run: 500

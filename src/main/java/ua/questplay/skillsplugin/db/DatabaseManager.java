@@ -35,9 +35,13 @@ public class DatabaseManager {
                 "uuid TEXT PRIMARY KEY," +
                 "player_class TEXT NOT NULL," +
                 "skills TEXT)";
+        String sql1 = "CREATE TABLE IF NOT EXISTS skill_names (skill_name TEXT NOT NULL)";
         String virtual = "CREATE VIRTUAL TABLE IF NOT EXISTS player_data_search USING fts5(uuid, player_class, skills);";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.execute();
+            try (PreparedStatement stmt2 = connection.prepareStatement(sql1)){
+                stmt2.execute();
+            }
             try (PreparedStatement stmt1 = connection.prepareStatement(virtual)) {
                 stmt1.execute();
             }
@@ -93,12 +97,6 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public String getPlayerClass() {
-        String sql = "";
-
-        return null;
     }
 
     public boolean hasPlayerClass(UUID uuid, String player_class) {
@@ -162,6 +160,60 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addSkillName(String skillName) {
+        String sqlCheck = "SELECT skill_name FROM skill_names WHERE skill_name = ?";
+        String sqlInsert = "INSERT INTO skill_names (skill_name) VALUES (?)";
+
+        try (PreparedStatement checkStmt = connection.prepareStatement(sqlCheck)) {
+            checkStmt.setString(1, skillName);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (!rs.next()) {
+                try (PreparedStatement insertStmt = connection.prepareStatement(sqlInsert)) {
+                    insertStmt.setString(1, skillName);
+                    insertStmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String[] getSkillNames(String prefix) {
+        List<String> skills = new ArrayList<>();
+        String sql = "SELECT skill_name FROM skill_names WHERE skill_name LIKE ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, prefix + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                skills.add(rs.getString("skill_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return skills.toArray(new String[0]);
+    }
+
+    public String[] getAllSkillNames() {
+        List<String> skills = new ArrayList<>();
+        String sql = "SELECT skill_name FROM skill_names";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                skills.add(rs.getString("skill_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return skills.toArray(new String[0]);
     }
 
 

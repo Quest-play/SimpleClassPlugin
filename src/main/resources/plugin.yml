@@ -9,6 +9,11 @@ depend: [ Vault ]
 database: true
 
 commands:
+  give_skill:
+    description: "Выдать навык игроку"
+    usage: /give_skill <player> <skill>
+    permission: skillsplugin.give_skill
+
   class:
     description: "Выбор класса"
     usage: /class
@@ -35,6 +40,7 @@ permissions:
       skillsplugin.class: true
       skillsplugin.skills: true
       skillsplugin.reload: true
+      skillsplugin.give_skill: true
 
   skillsplugin.class:
     description: "Доступ к выбору класса."
@@ -46,4 +52,8 @@ permissions:
 
   skillsplugin.reload:
     description: "Доступ к перезагрузке конфигурации"
+    default: op
+
+  skillsplugin.give_skill:
+    description: "Доступ к выдаче навыков"
     default: op

@@ -34,22 +34,25 @@ public class SkillsGUIListener implements Listener {
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_killer")) {
             switch (slot) {
                 case 9 -> {
+                    processSkillPurchase(player, SkillType.KILLER_MONEY);
+                }
+                case 10 -> {
                     processSkillPurchase(player, SkillType.KILLER_SPEED);
                 }
 
-                case 10 -> {
+                case 11 -> {
                     processSkillPurchase(player, SkillType.KILLER_MURDER);
                 }
 
-                case 11 -> {
+                case 12 -> {
                     processSkillPurchase(player, SkillType.KILLER_HASTE);
                 }
 
-                case 12 -> {
+                case 13 -> {
                     processSkillPurchase(player, SkillType.KILLER_VAMPIRISM);
                 }
 
-                case 13 -> {
+                case 14 -> {
                     processSkillPurchase(player, SkillType.KILLER_RECOVERY);
                 }
             }
@@ -58,22 +61,25 @@ public class SkillsGUIListener implements Listener {
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_thief")) {
             switch (slot) {
                 case 9 -> {
+                    processSkillPurchase(player, SkillType.THIEF_MONEY);
+                }
+                case 10 -> {
                     processSkillPurchase(player, SkillType.THIEF_SPEED);
                 }
 
-                case 10 -> {
+                case 11 -> {
                     processSkillPurchase(player, SkillType.THIEF_HASTE);
                 }
 
-                case 11 -> {
+                case 12 -> {
                     processSkillPurchase(player, SkillType.THIEF_EXP);
                 }
 
-                case 12 -> {
+                case 13 -> {
                     processSkillPurchase(player, SkillType.THIEF_CAUTION);
                 }
 
-                case 13 -> {
+                case 14 -> {
                     processSkillPurchase(player, SkillType.THIEF_SPECIALIZATION);
                 }
             }
@@ -82,22 +88,25 @@ public class SkillsGUIListener implements Listener {
         if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_merchant")) {
             switch (slot) {
                 case 9 -> {
+                    processSkillPurchase(player, SkillType.MERCHANT_MONEY);
+                }
+                case 10 -> {
                     processSkillPurchase(player, SkillType.MERCHANT_LUCK);
                 }
 
-                case 10 -> {
+                case 11 -> {
                     processSkillPurchase(player, SkillType.MERCHANT_EXP);
                 }
 
-                case 11 -> {
+                case 12 -> {
                     processSkillPurchase(player, SkillType.MERCHANT_RUN);
                 }
 
-                case 12 -> {
+                case 13 -> {
                     processSkillPurchase(player, SkillType.MERCHANT_HERO);
                 }
 
-                case 13 -> {
+                case 14 -> {
                     processSkillPurchase(player, SkillType.MERCHANT_BLESSING);
                 }
             }

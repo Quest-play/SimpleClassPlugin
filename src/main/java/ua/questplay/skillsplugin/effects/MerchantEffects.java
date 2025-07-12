@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,14 +19,15 @@ import org.bukkit.potion.PotionEffectType;
 import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.skills.SkillType;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TraderEffects implements Listener {
+public class MerchantEffects implements Listener {
     private final SkillsPlugin plugin;
     private final Map<Player, Integer> hitCounter = new HashMap<>();
 
-    public TraderEffects(SkillsPlugin plugin) {
+    public MerchantEffects(SkillsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -146,7 +146,37 @@ public class TraderEffects implements Listener {
         }
     }
 
+    @EventHandler
+    public void onMerchantMoney(PlayerTradeEvent event) {
+        Player player = event.getPlayer();
+        if (!plugin.getDbManager().hasSkill(player.getUniqueId(), skillTag(SkillType.MERCHANT_MONEY))) return;
+
+
+        if (Math.random() > plugin.getConfig().getDouble("merchant.chances.money")) return;
+
+        int moneyGained = 1 + (int)(Math.random() * 15);
+        giveMoney(player, moneyGained);
+
+
+        if (plugin.getConfig().getBoolean("skills_messages")) {
+            player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.money").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(moneyGained)).build()));
+        }
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+
+        player.spawnParticle(Particle.DUST,
+                player.getLocation().add(0, 1, 0),
+                10, 0.5, 0.5, 0.5);
+    }
+
     private String skillTag(SkillType skillType) {
         return plugin.getSkillManager().getSkill(skillType).tag();
+    }
+
+    private void giveMoney(Player player, int money) {
+        if (SkillsPlugin.getEconomyLegacy() != null) {
+            SkillsPlugin.getEconomyLegacy().depositPlayer(player.getName(), money);
+        } else {
+            SkillsPlugin.getEconomyModern().deposit(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(money));
+        }
     }
 }

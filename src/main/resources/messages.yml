@@ -1,6 +1,8 @@
 # Plugin messages
 restrict:
   onlyplayer: "<red>Только игроки могут использовать эту команду!"
+  notfound: "<red>Игрок не найден."
+  no_class: "<redВыбранный игрок должен выбрать класс.>"
 
 config:
   reload: "Конфигурация перезагружена."
@@ -33,8 +35,15 @@ skills_gui:
   no_res: "<red>Недостаточно валюты!"
   purchased: "<green>Навык приобретён!"
   price: "<yellow>Цена: <price>"
+  tick: "<green>Куплен✓"
   skills:
     thief:
+      money: "<dar_green>Жажда денег"
+      money_desc: "С шансом 20% ворует при ударе Игрока"
+      money_desc1: "Ворует у него 1% валюты"
+      money_desc2: "и передаёт её владельцу."
+      money_desc3: "Перезарядка каждые 30 секунд."
+
       speed: "<dark_green>Скорость Вора"
       speed_desc: "<dark_purple>Даёт постоянную <white>Скорость I"
 
@@ -55,6 +64,11 @@ skills_gui:
       specialization_desc1: "Накладывает эффект <white>Скорости II<dark_purple> и <white>Спешки II"
 
     killer:
+      money: "<red>Жажда денег"
+      money_desc: "Если Владелец убивает игрока."
+      money_desc1: "Забирает 30% монет жертвы."
+      money_desc2: "Перезарядка 4 минуты."
+
       speed: "<red>Скорость Убийцы"
       speed_desc: "Даёт постоянную <white>Скорость I"
 
@@ -77,6 +91,10 @@ skills_gui:
       recovery_desc2: "<white>Сопротивление II<dark_purple> на 5 секунд, <white>Регенерация I<dark_purple> на 30 секунд."
 
     merchant:
+      money: "<yellow>Жажда денег"
+      money_desc: "Когда Владелец совершает торговлю с жителем."
+      money_desc1: "С Шансом 25% владелец может получить 1-15 валюты."
+
       luck: "<yellow>Удача торговца"
       luck_desc: "Когда владелец копает руду."
       luck_desc1: "С шансом 35% добавляет к добытой руде 2-4 руды"
@@ -111,6 +129,11 @@ skill_effects:
     haste: "<green>Спешка убийцы проявляется!"
     recovery: "<green>Убийственное восстановление активировано!"
   merchant:
+    money: "+<money> монет"
     luck: "<gold>Удача + <bonus>"
     exp: "<green>Получено + <exp> опыта."
     blessing: "<green>Восстановлено <health>"
+
+success: "<green>Навык успешно выдан игроку <player>."
+no_skill: "<reg>Навык не введён."
+skill_not_found: "<red>Навыка не существует."
