@@ -51,7 +51,7 @@ public class MerchantEffects implements Listener {
                 block.getLocation().add(0, 0, 0),
                 10, 0.5, 0.5, 0.5);
         if (plugin.getConfig().getBoolean("skills_messages")) {
-            player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.luck").replaceText(TextReplacementConfig.builder().matchLiteral("<bonus>").replacement(String.valueOf(bonus)).build()));
+            player.sendActionBar(plugin.formattedFromKey("skill_effects.merchant.luck").replaceText(TextReplacementConfig.builder().matchLiteral("<bonus>").replacement(String.valueOf(bonus)).build()));
         }
     }
 
@@ -122,7 +122,7 @@ public class MerchantEffects implements Listener {
         player.giveExp(expGained);
 
         if (plugin.getConfig().getBoolean("skills_messages")) {
-            player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.exp").replaceText(TextReplacementConfig.builder().matchLiteral("<exp>").replacement(String.valueOf(expGained)).build()));
+            player.sendActionBar(plugin.formattedFromKey("skill_effects.merchant.exp").replaceText(TextReplacementConfig.builder().matchLiteral("<exp>").replacement(String.valueOf(expGained)).build()));
         }
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
@@ -142,7 +142,7 @@ public class MerchantEffects implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 1));
 
         if (plugin.getConfig().getBoolean("skills_messages")) {
-            player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.blessing").replaceText(TextReplacementConfig.builder().matchLiteral("<health>").replacement(String.valueOf(4)).build()));
+            player.sendActionBar(plugin.formattedFromKey("skill_effects.merchant.blessing").replaceText(TextReplacementConfig.builder().matchLiteral("<health>").replacement(String.valueOf(4)).build()));
         }
     }
 
@@ -159,7 +159,7 @@ public class MerchantEffects implements Listener {
 
 
         if (plugin.getConfig().getBoolean("skills_messages")) {
-            player.sendMessage(plugin.formattedFromKey("skill_effects.merchant.money").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(moneyGained)).build()));
+            player.sendActionBar(plugin.formattedFromKey("skill_effects.merchant.money").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(moneyGained)).build()));
         }
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 

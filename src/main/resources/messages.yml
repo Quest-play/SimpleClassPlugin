@@ -38,11 +38,10 @@ skills_gui:
   tick: "<green>Куплен✓"
   skills:
     thief:
-      money: "<dar_green>Жажда денег"
-      money_desc: "С шансом 20% ворует при ударе Игрока"
-      money_desc1: "Ворует у него 1% валюты"
+      money: "<dark_green>Жажда денег"
+      money_desc: "С шансом 10% ворует при ударе Игрока"
+      money_desc1: "Ворует у него 5% валюты"
       money_desc2: "и передаёт её владельцу."
-      money_desc3: "Перезарядка каждые 30 секунд."
 
       speed: "<dark_green>Скорость Вора"
       speed_desc: "<dark_purple>Даёт постоянную <white>Скорость I"
@@ -67,7 +66,9 @@ skills_gui:
       money: "<red>Жажда денег"
       money_desc: "Если Владелец убивает игрока."
       money_desc1: "Забирает 30% монет жертвы."
-      money_desc2: "Перезарядка 4 минуты."
+      money_desc2: "Перезарядка 3 минуты."
+      money_desc3: "Убийства существ с шансом 40%"
+      money_desc4: "Дают 1-15 монет."
 
       speed: "<red>Скорость Убийцы"
       speed_desc: "Даёт постоянную <white>Скорость I"
@@ -121,9 +122,13 @@ skills_gui:
 
 skill_effects:
   thief:
+    money_thief: "<green>Ты украл <money> монет."
+    money_target: "<red>У тебя украли <money>."
     stole_exp: "<green>Ты украл <stolen_exp> опыта."
     caution: "<green>Сопротивление активировано."
   killer:
+    money: "<green>+ <money> монет."
+    money_cd: "<red>Перезарядка: <time>"
     murder: "<green>Жажда убийства даёт силу!"
     vampirism: "<green>Вампиризм восстановил здоровье!"
     haste: "<green>Спешка убийцы проявляется!"

@@ -85,7 +85,7 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
             getLogger().info("Using Modern Economy.");
         } else {
             getLogger().severe("Economy plugin not found!");
-            //getServer().getPluginManager().disablePlugin(this);
+            getServer().getPluginManager().disablePlugin(this);
         }
 
         SkillPotion effectApplier = new SkillPotion(this);
@@ -225,7 +225,11 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
                 Material.GOLD_NUGGET,
                 List.of(formattedFromKey("skills_gui.skills.killer.money_desc"),
                         formattedFromKey("skills_gui.skills.killer.money_desc1"),
-                        formattedFromKey("skills_gui.skills.killer.money_desc2")
+                        formattedFromKey("skills_gui.skills.killer.money_desc2"),
+                        formattedFromKey("skills_gui.skills.killer.money_desc3"),
+                        formattedFromKey("skills_gui.skills.killer.money_desc4")
+
+
                 ),
                 prices.getInt("killer.money"),
                 "killer_money"
@@ -292,8 +296,7 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
                 Material.GOLD_NUGGET,
                 List.of(formattedFromKey("skills_gui.skills.thief.money_desc"),
                         formattedFromKey("skills_gui.skills.thief.money_desc1"),
-                        formattedFromKey("skills_gui.skills.thief.money_desc2"),
-                        formattedFromKey("skills_gui.skills.thief.money_desc3")
+                        formattedFromKey("skills_gui.skills.thief.money_desc2")
                 ),
                 prices.getInt("thief.money"),
                 "thief_money"
