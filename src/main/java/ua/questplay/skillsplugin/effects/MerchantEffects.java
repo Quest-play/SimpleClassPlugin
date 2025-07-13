@@ -162,10 +162,6 @@ public class MerchantEffects implements Listener {
             player.sendActionBar(plugin.formattedFromKey("skill_effects.merchant.money").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(moneyGained)).build()));
         }
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-
-        player.spawnParticle(Particle.DUST,
-                player.getLocation().add(0, 1, 0),
-                10, 0.5, 0.5, 0.5);
     }
 
     private String skillTag(SkillType skillType) {

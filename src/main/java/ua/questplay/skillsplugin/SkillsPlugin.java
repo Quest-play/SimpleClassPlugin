@@ -85,7 +85,7 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
             getLogger().info("Using Modern Economy.");
         } else {
             getLogger().severe("Economy plugin not found!");
-            getServer().getPluginManager().disablePlugin(this);
+            //getServer().getPluginManager().disablePlugin(this);
         }
 
         SkillPotion effectApplier = new SkillPotion(this);
