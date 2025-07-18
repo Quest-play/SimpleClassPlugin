@@ -1,5 +1,9 @@
 package ua.questplay.skillsplugin;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -15,13 +19,7 @@ import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import ua.questplay.skillsplugin.commands.ClassCommand;
-import ua.questplay.skillsplugin.commands.GiveSkillCommand;
-import ua.questplay.skillsplugin.commands.ReloadCommand;
-import ua.questplay.skillsplugin.commands.SkillsCommand;
-import ua.questplay.skillsplugin.commands.tabcompleters.GiveSkillCompleter;
-import ua.questplay.skillsplugin.commands.tabcompleters.NullCompleter;
-import ua.questplay.skillsplugin.commands.tabcompleters.ReloadCompleter;
+import ua.questplay.skillsplugin.commands.*;
 import ua.questplay.skillsplugin.db.DatabaseManager;
 import ua.questplay.skillsplugin.effects.KillerEffects;
 import ua.questplay.skillsplugin.effects.SkillPotion;
@@ -49,6 +47,13 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
 
     private static Economy economyModern = null;
     private static net.milkbowl.vault.economy.Economy economyLegacy = null;
+    private ClassCommand classCommand;
+
+    private final LiteralCommandNode<CommandSourceStack> buildCommand = Commands.literal("reload")
+            .then(Commands.literal("all"))
+            .then(Commands.literal("config"))
+            .then(Commands.literal("messages"))
+            .build();
 
 
     private final SkillManager skillManager = new SkillManager();
@@ -71,8 +76,8 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
         setupMessagesConfig();
         setupPricesConfig();
 
-        registerSkills();
         registerCommands();
+        registerSkills();
         registerEvents();
 
         saveSkillsToDb();
@@ -198,15 +203,12 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
 
     //Register
     private void registerCommands() {
-        getCommand("class").setExecutor(new ClassCommand(this));
-        getCommand("reload").setExecutor(new ReloadCommand(this));
-        getCommand("skills").setExecutor(new SkillsCommand(this));
-        getCommand("give_skill").setExecutor(new GiveSkillCommand(this));
-
-        getCommand("class").setTabCompleter(new NullCompleter());
-        getCommand("skills").setTabCompleter(new NullCompleter());
-        getCommand("give_skill").setTabCompleter(new GiveSkillCompleter(this));
-        getCommand("reload").setTabCompleter(new ReloadCompleter());
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register("class", new ClassCommand(this));
+            commands.registrar().register("skills_reload", new ReloadCommand(this));
+            commands.registrar().register("skills", new SkillsCommand(this));
+            commands.registrar().register("give_skill", new GiveSkillCommand(this));
+        });
     }
 
     private void registerEvents() {

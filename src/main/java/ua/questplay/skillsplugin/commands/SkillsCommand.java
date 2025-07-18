@@ -1,22 +1,22 @@
 package ua.questplay.skillsplugin.commands;
 
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ua.questplay.skillsplugin.skills.SkillData;
+import org.jspecify.annotations.Nullable;
 import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.SkillsGUI;
+import ua.questplay.skillsplugin.skills.SkillData;
 import ua.questplay.skillsplugin.skills.SkillType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class SkillsCommand implements CommandExecutor {
+public class SkillsCommand implements BasicCommand {
     private final SkillsPlugin plugin;
     private final List<Component> desc = new ArrayList<>();
 
@@ -25,15 +25,17 @@ public class SkillsCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+    public void execute(CommandSourceStack commandSourceStack, String[] args) {
+        CommandSender sender = commandSourceStack.getSender();
+
         if (!(sender instanceof Player player)) {
             sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
-            return true;
+            return;
         }
 
         if (!plugin.getDbManager().hasClass(player.getUniqueId())) {
             sender.sendMessage(plugin.formattedFromKey("class_command.choose_class"));
-            return true;
+            return;
         }
         SkillsGUI skillsGUI = new SkillsGUI(plugin.formattedFromKey("skills_gui.title"),54);
 
@@ -111,8 +113,20 @@ public class SkillsCommand implements CommandExecutor {
 
 
         skillsGUI.open(player);
-
-        return true;
     }
 
+    @Override
+    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+        return BasicCommand.super.suggest(commandSourceStack, args);
+    }
+
+    @Override
+    public boolean canUse(CommandSender sender) {
+        return BasicCommand.super.canUse(sender);
+    }
+
+    @Override
+    public @Nullable String permission() {
+        return BasicCommand.super.permission();
+    }
 }

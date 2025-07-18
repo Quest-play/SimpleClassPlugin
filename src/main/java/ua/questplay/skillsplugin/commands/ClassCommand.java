@@ -1,30 +1,32 @@
 package ua.questplay.skillsplugin.commands;
 
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 import ua.questplay.skillsplugin.SkillsPlugin;
 import ua.questplay.skillsplugin.gui.ClassGUI;
 
+import java.util.Collection;
 import java.util.List;
 
-public class ClassCommand implements CommandExecutor {
-
+public class ClassCommand implements BasicCommand {
     private final SkillsPlugin plugin;
 
-    public ClassCommand(SkillsPlugin  plugin) {
+    public ClassCommand(SkillsPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!(sender instanceof Player player)) {
+    public void execute(CommandSourceStack commandSourceStack, String[] args) {
+        Entity sender = commandSourceStack.getExecutor();
+        if (!(commandSourceStack.getExecutor() instanceof Player player)) {
             sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
-            return true;
+            return;
         }
 
         //GUI Components
@@ -42,11 +44,10 @@ public class ClassCommand implements CommandExecutor {
         // Damn. You already have a game class.
         if (plugin.getDbManager().hasClass(player.getUniqueId())) {
             player.sendMessage(plugin.formattedFromKey("class_command.already_have_class"));
-            return true;
+            return;
         }
 
 
-        // Открываем GUI (пока просто текст)
         ClassGUI classgui = new ClassGUI(plugin.getMessageFromKey("class_command.class_gui.title"), 54);
         for (int i = 0; i < 9; i++) {
             classgui.addItem(i, Material.GRAY_STAINED_GLASS_PANE, frameName, framLore);
@@ -60,6 +61,20 @@ public class ClassCommand implements CommandExecutor {
         classgui.addItem(11, Material.TOTEM_OF_UNDYING, traderName, traderLore);
 
         classgui.open(player);
-        return true;
+    }
+
+    @Override
+    public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
+        return BasicCommand.super.suggest(commandSourceStack, args);
+    }
+
+    @Override
+    public boolean canUse(CommandSender sender) {
+        return BasicCommand.super.canUse(sender);
+    }
+
+    @Override
+    public @Nullable String permission() {
+        return BasicCommand.super.permission();
     }
 }

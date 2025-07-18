@@ -1,0 +1,39 @@
+name: SkillsPlugin
+version: '1.0.1'
+bootstrapper: ua.questplay.skillsplugin.SkillsPluginBootstrap
+main: ua.questplay.skillsplugin.SkillsPlugin
+api-version: '1.21'
+authors:
+  - 'Quest_play'
+description: "Adds simple game classes"
+website: ""
+
+dependencies:
+  server:
+    Vault:
+      load: BEFORE
+      required: true
+
+
+
+
+permissions:
+  skillsplugin.*:
+    description: "Весь доступ к плагину."
+    children:
+      skillsplugin.class: true
+      skillsplugin.skills: true
+      skillsplugin.reload: true
+      skillsplugin.give_skill: true
+  skillsplugin.class:
+    description: "Доступ к выбору класса."
+    default: true
+  skillsplugin.skills:
+    description: "Доступ к меню навыков"
+    default: true
+  skillsplugin.reload:
+    description: "Доступ к перезагрузке конфигурации"
+    default: op
+  skillsplugin.give_skill:
+    description: "Доступ к выдаче навыков"
+    default: op
