@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'ua.questplay'
-version = '1.0.1'
+version = '1.1.1'
 
 repositories {
     mavenCentral()
@@ -26,7 +26,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
-    compileOnly "net.milkbowl.vault:VaultUnlockedAPI:2.12"
+    compileOnly "net.milkbowl.vault:VaultUnlockedAPI:2.15"
     compileOnly("net.sacredlabyrinth.phaed.simpleclans:SimpleClans:2.19.2")
     //compileOnly("net.luckperms:api:5.4")
 }
