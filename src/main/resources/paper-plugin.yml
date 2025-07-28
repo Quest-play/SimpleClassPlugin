@@ -5,7 +5,7 @@ main: ua.questplay.skillsplugin.SkillsPlugin
 api-version: '1.21'
 authors:
   - 'Quest_play'
-description: "Adds simple game classes"
+description: "Adds game classes to your server."
 website: ""
 
 dependencies:
