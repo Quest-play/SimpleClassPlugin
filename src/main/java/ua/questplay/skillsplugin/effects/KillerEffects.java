@@ -1,8 +1,11 @@
 package ua.questplay.skillsplugin.effects;
 
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +25,9 @@ import java.util.UUID;
 
 public class KillerEffects implements Listener {
     private final SkillsPlugin plugin;
+    private final ClanManager clanManager = SkillsPlugin.getInstance().getSimpleClans().getClanManager();
     private final Map<UUID, Long> cooldowns = new HashMap<>();
+
 
     private static final long COOLDOWN_MS = 3 * 60 * 1000;
 
@@ -36,9 +41,14 @@ public class KillerEffects implements Listener {
 
         if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_MURDER))) return;
 
-        boolean isPlayerVictim = event.getEntity() instanceof Player;
+        if (!(event.getEntity() instanceof  Player victim)) return;
 
-        if (!isPlayerVictim) return;
+        ClanPlayer attackerClan = clanManager.getClanPlayer(attacker);
+        ClanPlayer victimClan = clanManager.getClanPlayer(victim);
+
+        if (attackerClan != null && victimClan != null) {
+            if (attackerClan.getClan().equals(victimClan.getClan())) return;
+        }
 
         if (Math.random() > plugin.getConfig().getDouble("killer.chances.murder")) return;
 
@@ -61,18 +71,26 @@ public class KillerEffects implements Listener {
     public void onKillerVampirism(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
 
-        boolean isPlayerVictim = event.getEntity() instanceof Player;
 
         if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_VAMPIRISM))) return;
 
-        if (!isPlayerVictim) return;
+        if (!(event.getEntity() instanceof  Player victim)) return;
+
+        ClanPlayer attackerClan = clanManager.getClanPlayer(attacker);
+        ClanPlayer victimClan = clanManager.getClanPlayer(victim);
+
+        if (attackerClan != null && victimClan != null) {
+            if (attackerClan.getClan().equals(victimClan.getClan())) return;
+        }
 
         if (Math.random() > plugin.getConfig().getDouble("killer.chances.vampirism")) return;
 
-        double damage = 1.0;
-        Player target = (Player) event.getEntity();
-        target.setHealth(Math.max(0, target.getHealth() - damage));
+        float damage = 1.0f;
+
+        victim.setHealth(Math.max(0, victim.getHealth() - damage));
+
         attacker.setHealth(Math.min(20, attacker.getHealth() + damage / 2));
+
         if (plugin.getConfig().getBoolean("skills_messages")) {
             attacker.sendActionBar(plugin.formattedFromKey("skill_effects.killer.vampirism"));
         }
@@ -86,11 +104,17 @@ public class KillerEffects implements Listener {
     public void onKillerHaste(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
 
-        boolean isPlayerVictim = event.getEntity() instanceof Player;
-
         if (!plugin.getDbManager().hasSkill(attacker.getUniqueId(), skillTag(SkillType.KILLER_HASTE))) return;
 
-        if (!isPlayerVictim) return;
+        if (!(event.getEntity() instanceof  Player victim)) return;
+
+        ClanPlayer attackerClan = clanManager.getClanPlayer(attacker);
+        ClanPlayer victimClan = clanManager.getClanPlayer(victim);
+
+        if (attackerClan != null && victimClan != null) {
+            if (attackerClan.getClan().equals(victimClan.getClan())) return;
+        }
+
 
         if (Math.random() > plugin.getConfig().getDouble("killer.chances.haste")) return;
 
@@ -112,9 +136,17 @@ public class KillerEffects implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player killer = event.getEntity().getKiller();
+        Player victim = event.getPlayer();
         if (killer == null) return;
 
         if (!plugin.getDbManager().hasSkill(killer.getUniqueId(), skillTag(SkillType.KILLER_RECOVERY))) return;
+
+        ClanPlayer attackerClan = clanManager.getClanPlayer(killer);
+        ClanPlayer victimClan = clanManager.getClanPlayer(victim);
+
+        if (attackerClan != null && victimClan != null) {
+            if (attackerClan.getClan().equals(victimClan.getClan())) return;
+        }
 
         killer.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
@@ -154,13 +186,21 @@ public class KillerEffects implements Listener {
     @EventHandler
     public void onKillerMoneyFromPlayer(PlayerDeathEvent event) {
         Player killer = event.getEntity().getKiller();
-        Player target = event.getPlayer();
+        Player victim = event.getPlayer();
 
         if (killer == null) return;
 
         UUID killerId = killer.getUniqueId();
 
         if (!plugin.getDbManager().hasSkill(killer.getUniqueId(), skillTag(SkillType.KILLER_MONEY))) return;
+
+        ClanPlayer attackerClan = clanManager.getClanPlayer(killer);
+        ClanPlayer victimClan = clanManager.getClanPlayer(victim);
+
+        if (attackerClan != null && victimClan != null) {
+            if (attackerClan.getClan().equals(victimClan.getClan())) return;
+        }
+
 
         long currentTime = System.currentTimeMillis();
         long lastUsed = cooldowns.getOrDefault(killerId, 0L);
@@ -172,7 +212,7 @@ public class KillerEffects implements Listener {
             return;
         }
 
-        Number targetBalance = getMoney(target);
+        Number targetBalance = getMoney(victim);
         if (targetBalance.doubleValue() < 1) {
             return;
         }
@@ -183,10 +223,10 @@ public class KillerEffects implements Listener {
             stolenAmount = 1;
         }
 
-        if (!hasMoney(target, stolenAmount)) {
+        if (!hasMoney(victim, stolenAmount)) {
             return;
         }
-        takeMoney(target, stolenAmount);
+        takeMoney(victim, stolenAmount);
         giveMoney(killer, stolenAmount);
 
         cooldowns.put(killerId, currentTime);
@@ -194,7 +234,7 @@ public class KillerEffects implements Listener {
         if (!plugin.getConfig().getBoolean("skills_messages")) return;
 
         killer.sendMessage(plugin.formattedFromKey("skill_effects.thief.money_thief").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(stolenAmount)).build()));
-        target.sendMessage(plugin.formattedFromKey("skill_effects.thief.money_target").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(stolenAmount)).build()));
+        victim.sendMessage(plugin.formattedFromKey("skill_effects.thief.money_target").replaceText(TextReplacementConfig.builder().matchLiteral("<money>").replacement(String.valueOf(stolenAmount)).build()));
     }
 
     @EventHandler

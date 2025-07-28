@@ -45,7 +45,10 @@ public class ClassGUIListener implements Listener {
                 inventory.close();
                 break;
             case 12:
-                player.sendMessage(gui.getClass().descriptorString());
+                plugin.getDbManager().savePlayerClass(player.getUniqueId(), "class_tank");
+                plugin.getDbManager().addSkill(player.getUniqueId(), plugin.getSkillManager().getSkill(SkillType.TANK_MONEY).tag());
+                player.sendMessage(plugin.formattedFromKey("class_command.class_list.tank_given"));
+                inventory.close();
                 break;
         }
     }

@@ -1,5 +1,5 @@
 name: SkillsPlugin
-version: '1.0.1'
+version: '1.1.1'
 bootstrapper: ua.questplay.skillsplugin.SkillsPluginBootstrap
 main: ua.questplay.skillsplugin.SkillsPlugin
 api-version: '1.21'
@@ -14,7 +14,9 @@ dependencies:
       load: BEFORE
       required: true
 
-
+    SimpleClans:
+      load: BEFORE
+      required: true
 
 
 permissions:

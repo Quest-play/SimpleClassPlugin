@@ -2,7 +2,7 @@
 restrict:
   onlyplayer: "<red>Только игроки могут использовать эту команду!"
   notfound: "<red>Игрок не найден."
-  no_class: "<redВыбранный игрок должен выбрать класс.>"
+  no_class: "<red>Выбранный игрок должен выбрать класс.>"
 
 config:
   reload: "Конфигурация перезагружена."
@@ -17,6 +17,7 @@ class_command:
     thief_given: "<green>Ты выбрал класс <dark_green>Вор<green>!"
     assassin_given: "<green>Ты выбрал класс <dark_red>Убийца<green>!"
     trader_given: "<green>Ты выбрал класс <yellow>Торговец<green>!"
+    tank_given: "<green>Ты выбрал класс <gray>Танк<green>!"
     no_class: "<red>Неизвестный класс!"
 
   class_gui:
@@ -24,7 +25,9 @@ class_command:
     thief: "<green>Вор"
     killer: "<gradient:red:dark_red>Убийца</gradient>"
     trader: "<yellow>Торговец"
+    tank: "<gray>Танк"
     lore:
+      tank: "<gray>Стань щитом для своих союзником."
       thief: "Будь быстрее или поймают!"
       killer: "<gradient:red:dark_red>Путь наполненный запахом крови...</gradient>"
       trader: "Станешь ли ты мастером торговли?"
@@ -119,6 +122,36 @@ skills_gui:
       blessing_desc: "Если владелец носит в другой руке тотем бессмертия."
       blessing_desc1: "Владелец получает +6 сердец."
       blessing_desc2: "Если Владелец получает урон с шансом 15% восстанавливает 4 сердца."
+    tank:
+      money: "<gray>Жажда денег"
+      money_desc: "При получении урона от игрока."
+      money_desc2: "С шансом 20% владелец получает"
+      money_desc3: "3 + количество союзников(не более 12) монет"
+      money_desc4: "Союзники должны быть в радиусе 10 блоков"
+
+      block: "<gray>Мастер Блока"
+      block_desc: "При получении урона."
+      block_desc2: "С шансом 9% владелец может заблокировать"
+      block_desc3: "входящий урон."
+
+      parry: "<gray>Парирование"
+      parry_desc: "При получении урона."
+      parry_desc2: "С шансом 35% владелец отражает 50% урона атакующему"
+
+      balance: "<gray>Равновесие"
+      balance_desc: "Получаемый урон снижен на 30%"
+      balance_desc2: "Наносимый урон по игрокам снижен на 25%"
+      balance_desc3: "Наносимый урон по монстрам снижен на 12.5%"
+
+      block_aura: "<gray>Аура блокирования"
+      block_aura_desc: "Все союзники в радиусе 12 блоков"
+      block_aura_desc2: "имеют шанс 15% при получении урона"
+      block_aura_desc3: "заблокировать урон"
+
+      redirect_aura: "<gray>Аура перенаправления"
+      redirect_aura_desc: "Все союзники в радиусе 6 блоков"
+      redirect_aura_desc2: "имеют шанс 30% при получении урона"
+      redirect_aura_desc3: "перенаправить урон во владельца навыка."
 
 skill_effects:
   thief:
@@ -138,6 +171,12 @@ skill_effects:
     luck: "<gold>Удача + <bonus>"
     exp: "<green>Получено + <exp> опыта."
     blessing: "<green>Восстановлено <health>"
+  tank:
+    money: "<green>+<money> монет"
+    block: "<green>Урон заблокирован."
+    parry: "<green>Отражено <damage> урона"
+    redirect_ally: "<green>Урон перенаправлен."
+    redirect_tank: "<green>Вам перенаправлен урон."
 
 success: "<green>Навык успешно выдан игроку <player>."
 no_skill: "<reg>Навык не введён."

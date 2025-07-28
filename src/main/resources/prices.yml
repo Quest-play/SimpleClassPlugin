@@ -22,3 +22,11 @@ merchant:
   run: 500
   hero: 750
   blessing: 1000
+
+tank:
+  money: 0
+  block: 500
+  parry: 750
+  balance: 1250
+  block_aura: 2750
+  redirect_aura: 4000

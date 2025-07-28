@@ -2,6 +2,7 @@ package ua.questplay.skillsplugin.effects;
 
 import io.papermc.paper.event.player.PlayerTradeEvent;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 public class MerchantEffects implements Listener {
     private final SkillsPlugin plugin;
+    private final ClanManager clanManager = SkillsPlugin.getInstance().getSimpleClans().getClanManager();
     private final Map<Player, Integer> hitCounter = new HashMap<>();
 
     public MerchantEffects(SkillsPlugin plugin) {

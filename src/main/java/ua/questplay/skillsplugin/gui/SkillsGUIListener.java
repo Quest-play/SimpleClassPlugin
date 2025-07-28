@@ -111,6 +111,33 @@ public class SkillsGUIListener implements Listener {
                 }
             }
         }
+        //--------------------------------------------------------------------------------------------------------------
+        if (plugin.getDbManager().hasPlayerClass(player.getUniqueId(), "class_tank")) {
+            switch (slot) {
+                case 9 -> {
+                    processSkillPurchase(player, SkillType.TANK_MONEY);
+                }
+                case 10 -> {
+                    processSkillPurchase(player, SkillType.TANK_BLOCK);
+                }
+
+                case 11 -> {
+                    processSkillPurchase(player, SkillType.TANK_PARRY);
+                }
+
+                case 12 -> {
+                    processSkillPurchase(player, SkillType.TANK_BALANCE);
+                }
+
+                case 13 -> {
+                    processSkillPurchase(player, SkillType.TANK_BLOCK_AURA);
+                }
+
+                case 14 -> {
+                    processSkillPurchase(player, SkillType.TANK_REDIRECT_AURA);
+                }
+            }
+        }
     }
 
     private void processSkillPurchase(Player player, SkillType skillType) {

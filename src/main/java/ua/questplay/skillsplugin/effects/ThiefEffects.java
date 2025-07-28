@@ -1,6 +1,8 @@
 package ua.questplay.skillsplugin.effects;
 
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +18,7 @@ import ua.questplay.skillsplugin.skills.SkillType;
 import java.math.BigDecimal;
 
 public class ThiefEffects implements Listener {
+    private final ClanManager clanManager = SkillsPlugin.getInstance().getSimpleClans().getClanManager();
     private final SkillsPlugin plugin;
 
     public ThiefEffects(SkillsPlugin plugin) {
@@ -29,6 +32,13 @@ public class ThiefEffects implements Listener {
         if (!(event.getEntity() instanceof Player target)) return;
 
         if (!plugin.getDbManager().hasSkill(thief.getUniqueId(), skillTag(SkillType.THIEF_EXP))) return;
+
+        ClanPlayer thiefClan = clanManager.getClanPlayer(thief);
+        ClanPlayer victimClan = clanManager.getClanPlayer(target);
+
+        if (thiefClan != null && victimClan != null) {
+            if (thiefClan.getClan().equals(victimClan.getClan())) return;
+        }
 
         if (Math.random() > plugin.getConfig().getDouble("thief.chances.stole_exp")) return;
 
@@ -75,6 +85,13 @@ public class ThiefEffects implements Listener {
         if (thief.equals(target)) return;
 
         if (!plugin.getDbManager().hasSkill(thief.getUniqueId(), skillTag(SkillType.THIEF_MONEY))) return;
+
+        ClanPlayer thiefClan = clanManager.getClanPlayer(thief);
+        ClanPlayer victimClan = clanManager.getClanPlayer(target);
+
+        if (thiefClan != null && victimClan != null) {
+            if (thiefClan.getClan().equals(victimClan.getClan())) return;
+        }
 
         if (Math.random() > plugin.getConfig().getDouble("thief.chances.money")) return;
 

@@ -25,10 +25,6 @@ public class GiveSkillCommand implements BasicCommand {
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
         CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
-            return;
-        }
 
         if (args.length != 2) {
             return;
@@ -43,6 +39,7 @@ public class GiveSkillCommand implements BasicCommand {
 
         if (!plugin.getDbManager().inTable(targetPlayer.getUniqueId())) {
             sender.sendMessage(plugin.formattedFromKey("restrict.no_class"));
+            return;
         }
 
         String skill = args[1];
@@ -54,7 +51,7 @@ public class GiveSkillCommand implements BasicCommand {
         }
 
 
-        plugin.getDbManager().addSkill(targetPlayer.getUniqueId(), skill.toLowerCase());
+        plugin.getDbManager().addSkill(targetPlayer.getUniqueId(), skill);
         sender.sendMessage(plugin.formattedFromKey("success").replaceText(TextReplacementConfig.builder().matchLiteral("<player>").replacement(targetPlayer.getName()).build()));
     }
 
@@ -80,7 +77,14 @@ public class GiveSkillCommand implements BasicCommand {
 
     @Override
     public boolean canUse(CommandSender sender) {
-        return BasicCommand.super.canUse(sender);
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(plugin.formattedFromKey("restrict.onlyplayer"));
+            return false;
+        }
+        if (!BasicCommand.super.canUse(sender)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

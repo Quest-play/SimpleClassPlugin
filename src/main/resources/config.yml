@@ -61,3 +61,11 @@ merchant:
         effect2: 1
         effect3_speed: 2
         effect3_resistance: 0
+
+tank:
+  chances:
+    money: 0.2
+    block: 0.09
+    parry: 0.35
+    block_aura: 0.15
+    redirect_aura: 0.3

@@ -16,6 +16,8 @@ import java.util.List;
 
 public class ClassCommand implements BasicCommand {
     private final SkillsPlugin plugin;
+    Component frameName = Component.text("");
+    List<Component> framLore = List.of(Component.text(""));
 
     public ClassCommand(SkillsPlugin plugin) {
         this.plugin = plugin;
@@ -29,19 +31,16 @@ public class ClassCommand implements BasicCommand {
             return;
         }
 
-        //GUI Components
-        Component frameName = Component.text("");
-        List<Component> framLore = List.of(Component.text(""));
-
         Component killerName = plugin.formattedFromKey("class_command.class_gui.killer");
         Component thiefName = plugin.formattedFromKey("class_command.class_gui.thief");
         Component traderName = plugin.formattedFromKey("class_command.class_gui.trader");
+        Component tankName = plugin.formattedFromKey("class_command.class_gui.tank");
 
         List<Component> killerLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.killer"));
         List<Component> thiefLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.thief"));
         List<Component> traderLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.trader"));
+        List<Component> tankLore = List.of(plugin.formattedFromKey("class_command.class_gui.lore.tank"));
 
-        // Damn. You already have a game class.
         if (plugin.getDbManager().hasClass(player.getUniqueId())) {
             player.sendMessage(plugin.formattedFromKey("class_command.already_have_class"));
             return;
@@ -59,6 +58,7 @@ public class ClassCommand implements BasicCommand {
         classgui.addItem(9, Material.NETHERITE_SWORD, killerName, killerLore);
         classgui.addItem(10, Material.GOLDEN_BOOTS, thiefName, thiefLore);
         classgui.addItem(11, Material.TOTEM_OF_UNDYING, traderName, traderLore);
+        classgui.addItem(12, Material.SHIELD, tankName, tankLore);
 
         classgui.open(player);
     }
@@ -75,6 +75,6 @@ public class ClassCommand implements BasicCommand {
 
     @Override
     public @Nullable String permission() {
-        return BasicCommand.super.permission();
+        return "skillsplugin.class";
     }
 }
