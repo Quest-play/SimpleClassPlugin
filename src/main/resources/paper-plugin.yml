@@ -1,5 +1,5 @@
 name: SkillsPlugin
-version: '1.1.1'
+version: ${version}
 bootstrapper: ua.questplay.skillsplugin.SkillsPluginBootstrap
 main: ua.questplay.skillsplugin.SkillsPlugin
 api-version: '1.21'
