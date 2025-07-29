@@ -52,10 +52,10 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
         dbManager = new DatabaseManager(this);
-        dbManager.connect();
         simpleClans = (SimpleClans) getServer().getPluginManager().getPlugin("SimpleClans");
 
         saveDefaultConfig();
+        dbManager.connect();
         setupConfigFile();
         setupMessagesConfig();
         setupPricesConfig();
