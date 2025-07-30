@@ -168,13 +168,13 @@ public class SkillsGUIListener implements Listener {
         if (SkillsPlugin.getEconomyModern() != null) {
             return SkillsPlugin.getEconomyModern().has(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(price));
         } else {
-            return SkillsPlugin.getEconomyLegacy().has(player.getName(), price);
+            return SkillsPlugin.getEconomyLegacy().has(player, price);
         }
     }
 
     private void takeMoney(Player player, int price) {
         if (SkillsPlugin.getEconomyLegacy() != null) {
-            SkillsPlugin.getEconomyLegacy().withdrawPlayer(player.getName(), price);
+            SkillsPlugin.getEconomyLegacy().withdrawPlayer(player, price);
         } else {
             SkillsPlugin.getEconomyModern().withdraw(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(price));
         }

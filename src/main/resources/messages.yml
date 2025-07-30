@@ -3,11 +3,21 @@ restrict:
   onlyplayer: "<red>Only players can use this command!"
   notfound: "<red>Player not found."
   no_class: "<red>The selected player must choose a class.>"
+  have_class: "<red>You have no class."
 
 config:
   reload: "Configuration reloaded."
   messages: "Messages reloaded."
   wrong: "Incorrect parameter specified"
+
+reset:
+  message: "<red>Are you sure you want to reset your class and money?"
+  yes: "<green>[✔]"
+  no: "<red>[✖]"
+  yes_message: "<green>Click to confirm resetting class and money."
+  no_message: "<red>Click to cancel the reset."
+  success_delete: "<green>Your class and money have been removed."
+  canceled: "<green>Class reset cancelled"
 
 class_command:
   choose: "<green>Choose a class: /class"

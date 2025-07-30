@@ -196,7 +196,7 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
     }
 
     public Component formattedFromKey(String key) {
-        return MiniMessage.miniMessage().deserialize(getMessageFromKey(key)).decoration(TextDecoration.ITALIC, false);
+        return MiniMessage.miniMessage().deserialize(messages.getString(key)).decoration(TextDecoration.ITALIC, false);
     }
 
     public Component formattedPlaceholderFromKey(String key, String match, String replacement) {
@@ -213,6 +213,7 @@ public final class SkillsPlugin extends JavaPlugin implements Listener {
             commands.registrar().register("skills_reload", new ReloadCommand(this));
             commands.registrar().register("skills", new SkillsCommand(this));
             commands.registrar().register("give_skill", new GiveSkillCommand(this));
+            commands.registrar().register("reset_class", new ResetClassCommand(this));
         });
     }
 

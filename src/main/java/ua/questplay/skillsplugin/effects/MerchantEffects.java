@@ -172,7 +172,7 @@ public class MerchantEffects implements Listener {
 
     private void giveMoney(Player player, int money) {
         if (SkillsPlugin.getEconomyLegacy() != null) {
-            SkillsPlugin.getEconomyLegacy().depositPlayer(player.getName(), money);
+            SkillsPlugin.getEconomyLegacy().depositPlayer(player, money);
         } else {
             SkillsPlugin.getEconomyModern().deposit(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(money));
         }

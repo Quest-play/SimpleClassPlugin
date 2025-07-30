@@ -21,21 +21,26 @@ dependencies:
 
 permissions:
   skillsplugin.*:
-    description: "Весь доступ к плагину."
+    description: "Full access to plugin commands."
     children:
       skillsplugin.class: true
       skillsplugin.skills: true
       skillsplugin.reload: true
       skillsplugin.give_skill: true
+      skillsplugin.reset_command: true
   skillsplugin.class:
-    description: "Доступ к выбору класса."
+    description: "Access to class selection."
     default: true
   skillsplugin.skills:
-    description: "Доступ к меню навыков"
+    description: "Accessing the Skills Menu"
     default: true
   skillsplugin.reload:
-    description: "Доступ к перезагрузке конфигурации"
+    description: "Access to reload configuration"
     default: op
   skillsplugin.give_skill:
-    description: "Доступ к выдаче навыков"
+    description: "Access to Skill Issuance"
     default: op
+
+  skillsplugin.reset_command:
+    description: "Access to class reset"
+    default: true

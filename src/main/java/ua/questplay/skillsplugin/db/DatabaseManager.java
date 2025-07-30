@@ -26,7 +26,7 @@ public class DatabaseManager {
             createTables();
             plugin.getLogger().info("Database connected!");
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -46,7 +46,7 @@ public class DatabaseManager {
                 stmt1.execute();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -59,7 +59,7 @@ public class DatabaseManager {
             stmt.setString(3, ""); // skills по умолчанию — пустые
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -77,7 +77,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return false;
     }
@@ -94,7 +94,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return false;
     }
@@ -112,7 +112,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return false;
     }
@@ -129,7 +129,7 @@ public class DatabaseManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return false;
     }
@@ -158,7 +158,7 @@ public class DatabaseManager {
                 updateStmt.executeUpdate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -177,7 +177,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -193,7 +193,7 @@ public class DatabaseManager {
                 skills.add(rs.getString("skill_name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
 
         return skills.toArray(new String[0]);
@@ -210,10 +210,25 @@ public class DatabaseManager {
                 skills.add(rs.getString("skill_name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
 
         return skills.toArray(new String[0]);
+    }
+
+    public void deletePlayerData(UUID uuid) {
+        String sql = "DELETE FROM player_data WHERE uuid = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -223,7 +238,7 @@ public class DatabaseManager {
             if (connection != null && !connection.isClosed())
                 connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 }

@@ -176,13 +176,13 @@ public class TankEffects implements Listener {
         if (SkillsPlugin.getEconomyModern() != null) {
             return SkillsPlugin.getEconomyModern().has(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(price));
         } else {
-            return SkillsPlugin.getEconomyLegacy().has(player.getName(), price);
+            return SkillsPlugin.getEconomyLegacy().has(player, price);
         }
     }
 
     private void takeMoney(Player player, double price) {
         if (SkillsPlugin.getEconomyLegacy() != null) {
-            SkillsPlugin.getEconomyLegacy().withdrawPlayer(player.getName(), price);
+            SkillsPlugin.getEconomyLegacy().withdrawPlayer(player, price);
         } else {
             SkillsPlugin.getEconomyModern().withdraw(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(price));
         }
@@ -190,7 +190,7 @@ public class TankEffects implements Listener {
 
     private void giveMoney(Player player, double money) {
         if (SkillsPlugin.getEconomyLegacy() != null) {
-            SkillsPlugin.getEconomyLegacy().depositPlayer(player.getName(), money);
+            SkillsPlugin.getEconomyLegacy().depositPlayer(player, money);
         } else {
             SkillsPlugin.getEconomyModern().deposit(SkillsPlugin.getEconomyModern().getName(), player.getUniqueId(), BigDecimal.valueOf(money));
         }

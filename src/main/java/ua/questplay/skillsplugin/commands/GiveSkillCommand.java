@@ -9,14 +9,12 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 import ua.questplay.skillsplugin.SkillsPlugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public class GiveSkillCommand implements BasicCommand {
     private final SkillsPlugin plugin;
-    private final List<String> player_names = new ArrayList<>();
 
     public GiveSkillCommand(SkillsPlugin plugin) {
         this.plugin = plugin;
@@ -57,22 +55,21 @@ public class GiveSkillCommand implements BasicCommand {
 
     @Override
     public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
-        Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
-        for (Player player : players) {
-            player_names.add(player.getName());
-        }
 
         switch (args.length) {
             case  0 -> {
-                return player_names;
+                return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             }
             case 1 -> {
+
                 return List.of(plugin.getDbManager().getAllSkillNames());
+            }
+            case 2 -> {
+                return List.of(plugin.getDbManager().getSkillNames(args[1]));
             }
         }
 
-        player_names.clear();
-        return List.of("");
+        return List.of();
     }
 
     @Override
